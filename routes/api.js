@@ -16,7 +16,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 
 router.get("/all", function (req, res) {
-  res.send("Hello World from API \n /getUsers \n /getOneUser \n /registerUser \n /updateUser \n /deleteUser \n /registerEmployee \n /updateEmployee \n /getEmployees \n /getOneEmployee \n /deleteEmployee \n ");
+  res.send("Hello World from API. \n /getUsers \n /getOneUser \n /registerUser \n /updateUser \n /deleteUser \n /registerEmployee \n /updateEmployee \n /getEmployees \n /getOneEmployee \n /deleteEmployee \n ");
 });
 
 
