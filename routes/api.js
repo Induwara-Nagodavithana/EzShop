@@ -429,6 +429,7 @@ router.get("/getOneEType", urlencodedParser, function (req, res) {
 
 
 
+
 router.post("/registerPriceDetail", urlencodedParser, function (req, res) {
   console.log("Register Price Detail Start");
   
@@ -498,6 +499,7 @@ router.get("/getOnePriceDetail", urlencodedParser, function (req, res) {
     }
   });
 });
+
 
 
 
@@ -597,6 +599,8 @@ router.get("/getOnePayment", urlencodedParser, function (req, res) {
 });
 
 
+
+
 router.post("/registerRequest", urlencodedParser, function (req, res) {
   console.log("Register Request Start");
   
@@ -670,6 +674,7 @@ router.get("/getOneRequest", urlencodedParser, function (req, res) {
     }
   });
 });
+
 
 
 
