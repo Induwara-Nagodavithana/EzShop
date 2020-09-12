@@ -671,4 +671,99 @@ router.get("/getOneRequest", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/registerUsage", urlencodedParser, function (req, res) {
+  console.log("Register Usage Start");
+  
+  var userId = req.body.userId;
+  var usageData = req.body.usage;
+  var newUsage = {
+    usageData: usageData,
+    userId: userId
+  };
+
+  Usage.createUsage(newUsage, function (err, usage) {
+    if (err) {
+      console.log("errors " + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
+router.post("/updateUsage", urlencodedParser, function (req, res) {
+  console.log("Update Usage Start");
+  var id = req.body.id;
+  var userId = req.body.userId;
+  var usageData = req.body.usage;
+  var newUsage = {
+    usageData: usageData,
+    userId: userId
+  };
+
+  Usage.updateUsage(id,newUsage, function (err, usage) {
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
+router.get("/getUsage", urlencodedParser, function (req, res) {
+  Usage.getUsage(function(err, usage){
+    if (err) {
+      console.log("errors :-" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
+router.post("/deleteUsage", urlencodedParser, function (req, res) {
+  console.log("Usage Deleting");
+  
+  var id = req.body.id;
+  
+  Usage.deleteUsage(id, function (err, usage) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
+router.get("/getOneUsage", urlencodedParser, function (req, res) {
+  var id = req.body.id;
+  Usage.getUsageById(id, function(err, usage){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
 module.exports = router;

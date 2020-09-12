@@ -9,7 +9,7 @@ var Usage = db.define(
       usageData: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        
       },
   },
   {
@@ -22,7 +22,7 @@ var Usage = db.define(
 User.hasMany(Usage, {
     foreignKey: {
       allowNull: false,
-      name: "id",
+     // name: "id",
     },
   });
   
