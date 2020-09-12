@@ -1,12 +1,12 @@
 var User = require("../models/user");
 
-module.exports.getUserById = function (id, callback) {
-  User.findOne({
-    where: { id: id, status: "Active" },
-  }).then((user) => {
-    callback(null, user);
-  });
-};
+// module.exports.getUserById = function (id, callback) {
+//   User.findOne({
+//     where: { id: id, status: "Active" },
+//   }).then((user) => {
+//     callback(null, user);
+//   });
+// };
 module.exports.createUser = function (newUser, callback) {
   console.log("Create user");
 
