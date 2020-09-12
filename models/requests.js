@@ -9,12 +9,12 @@ var Request = db.define(
       requestData: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        
       },
       Type: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        
       },
   },
   {
@@ -28,7 +28,7 @@ var Request = db.define(
 User.hasMany(Request, {
     foreignKey: {
       allowNull: false,
-      name: "id",
+      //name: "id",
     },
   });
   

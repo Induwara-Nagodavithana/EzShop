@@ -596,4 +596,79 @@ router.get("/getOnePayment", urlencodedParser, function (req, res) {
   });
 });
 
+
+router.post("/registerRequest", urlencodedParser, function (req, res) {
+  console.log("Register Request Start");
+  
+  var userId = req.body.userId;
+  var requestData = req.body.request;
+  var Type = req.body.type;
+  var newRequest = {
+    requestData: requestData,
+    userId: userId,
+    Type: Type
+  };
+
+  Request.createRequest(newRequest, function (err, request) {
+    if (err) {
+      console.log("errors " + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(request);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ request: request}));
+    }
+  });
+});
+
+router.get("/getRequest", urlencodedParser, function (req, res) {
+  Request.getRequest(function(err, request){
+    if (err) {
+      console.log("errors :-" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(request);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ request: request}));
+    }
+  });
+});
+
+router.post("/deleteRequest", urlencodedParser, function (req, res) {
+  console.log("Request Deleting");
+  
+  var id = req.body.id;
+  
+  Request.deleteRequest(id, function (err, request) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(request);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ request: request}));
+    }
+  });
+});
+
+router.get("/getOneRequest", urlencodedParser, function (req, res) {
+  var id = req.body.id;
+  Request.getRequestById(id, function(err, request){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(request);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ request: request}));
+    }
+  });
+});
+
 module.exports = router;
