@@ -9,7 +9,7 @@ var Payment = db.define(
       paymentData: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        
       },
   },
   {
@@ -23,7 +23,8 @@ var Payment = db.define(
 User.hasMany(Payment, {
     foreignKey: {
       allowNull: false,
-      name: "id",
+      //name: "id",
+      unique: false,
     },
   });
   

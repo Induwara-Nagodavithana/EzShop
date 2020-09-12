@@ -197,6 +197,7 @@ router.post("/registerEmployee", urlencodedParser, function (req, res) {
 router.post("/updateEmployee", urlencodedParser, function (req, res) {
   console.log("Update Employee Start");
   //var username = req.body.username;
+  var id = req.body.id;
   var password = req.body.password;
  // var password2 = req.body.password2;
   var fname = req.body.fname;
@@ -219,7 +220,7 @@ router.post("/updateEmployee", urlencodedParser, function (req, res) {
     type: type,
   };
 
-  Employee.updateEmployee(newEmployee, function (err, employee) {
+  Employee.updateEmployee(id,newEmployee, function (err, employee) {
     if (err) {
       console.log("errors" + err.message);
       res.sendStatus(400);
@@ -499,5 +500,100 @@ router.get("/getOnePriceDetail", urlencodedParser, function (req, res) {
 });
 
 
+
+router.post("/registerPayment", urlencodedParser, function (req, res) {
+  console.log("Register Payment Start");
+  
+  var userId = req.body.userId;
+  var paymentData = req.body.pay;
+  var newPayment = {
+    paymentData: paymentData,
+    userId: userId
+  };
+
+  Payment.createPayment(newPayment, function (err, payment) {
+    if (err) {
+      console.log("errors " + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
+
+router.post("/updatePayment", urlencodedParser, function (req, res) {
+  console.log("Update Payment Start");
+  var id = req.body.id;
+  var userId = req.body.userId;
+  var paymentData = req.body.pay;
+  var newPayment = {
+    paymentData: paymentData,
+    userId: userId
+  };
+
+  Payment.updatePayment(id,newPayment, function (err, payment) {
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
+
+router.get("/getPayment", urlencodedParser, function (req, res) {
+  Payment.getPayment(function(err, payment){
+    if (err) {
+      console.log("errors :-" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
+
+router.post("/deletePayment", urlencodedParser, function (req, res) {
+  console.log("Payment Deleting");
+  
+  var id = req.body.id;
+  
+  Payment.deletePayment(id, function (err, payment) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
+
+router.get("/getOnePayment", urlencodedParser, function (req, res) {
+  var id = req.body.id;
+  Payment.getPaymentById(id, function(err, payment){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
 
 module.exports = router;

@@ -12,6 +12,24 @@ module.exports.createPayment = function (newPayment, callback) {
       });
   };
   
+  module.exports.updatePayment = function (id, newPayment, callback) {
+    console.log("Update Payment");
+  
+    // newUser.password = hash;
+  
+    Payment.update(newPayment, {
+      where: {
+        id: id,
+      },
+    })
+      .then((payment) => {
+        callback(null, payment);
+      })
+      .catch((err) => {
+        callback(err);
+      });
+  };
+  
   module.exports.getPayment = function (callback) {
     Payment.findAll().then((payment) => {
       callback(null, payment);
