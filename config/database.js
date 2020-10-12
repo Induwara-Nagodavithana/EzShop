@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 
-db = new Sequelize("swmsNew", "root", "1234", {
-  host: "localhost",
+db = new Sequelize("jfbwqcra4wtt0q2k", "o02i021ignqxfh05", "eu6ebv88v7qubzz0", {
+  host: "dno6xji1n8fm828n.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
   dialect: "mysql",
   pool: {
     max: 5,
