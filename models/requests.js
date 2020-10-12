@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
 
 const db = require("../config/database");
-var User = require("./user");
+const Accounts = require("./accounts");
+// var User = require("./user");
 
 var Request = db.define(
   "request",
@@ -16,6 +17,10 @@ var Request = db.define(
         allowNull: false,
         
       },
+      isPending: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      }
   },
   {
     timestamps: true,
@@ -25,13 +30,13 @@ var Request = db.define(
   }
 );
 
-User.hasMany(Request, {
+Accounts.hasMany(Request, {
     foreignKey: {
       allowNull: false,
       //name: "id",
     },
   });
   
-  Request.belongsTo(User);
+  Request.belongsTo(Accounts);
 
 module.exports = Request;

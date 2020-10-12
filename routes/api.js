@@ -9,11 +9,14 @@ var PriceDetail = require("../controller/priceDetail");
 var ReqType = require("../controller/reqTypes");
 var Request = require("../controller/request");
 var Usage = require("../controller/usage");
-var Center = require("../models/centers");
-
+var Account = require("../controller/account");
+// var Center = require("../models/centers");
+//var passport = require("passport");
+const bcrypt = require("bcryptjs");
+const saltRounds = 5;
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-
+// const passportJWTInit = require("./auth/passport_jwt");
 
 router.get("/all", function (req, res) {
   res.send("Hello World from API. \n /getUsers \n /getOneUser \n /registerUser \n /updateUser \n /deleteUser \n /registerEmployee \n /updateEmployee \n /getEmployees \n /getOneEmployee \n /deleteEmployee \n ");
@@ -37,7 +40,7 @@ router.get("/getUsers", urlencodedParser, function (req, res) {
   });
 });
 
-router.get("/getOneUser", urlencodedParser, function (req, res) {
+router.post("/getOneUser", urlencodedParser, function (req, res) {
   var id = req.body.id;
   User.getUserById(id, function(err, user){
     if (err) {
@@ -57,7 +60,6 @@ router.post("/registerUser", urlencodedParser, function (req, res) {
   console.log("Register USer Start");
  // var username = req.body.username;
   var password = req.body.password;
- var accountNo = req.body.accountNo;
   var fname = req.body.fname;
   var lname = req.body.lname;
   var address = req.body.address;
@@ -65,11 +67,12 @@ router.post("/registerUser", urlencodedParser, function (req, res) {
   var tel = req.body.contactNo;
   var city = req.body.city;
   var province = req.body.province;
-  var type = req.body.type;
+  var email = req.body.email;
+  var image = req.body.image;
+  var gender = req.body.gender;
 
   var newUser = {
     nic: nic,
-    accountno: accountNo,
     password: password,
     firstname: fname,
     lastname: lname,
@@ -77,7 +80,9 @@ router.post("/registerUser", urlencodedParser, function (req, res) {
     province: province,
     city: city,
     contactno: tel,
-    type: type,
+    email: email,
+    image: image,
+    gender:gender,
   };
 
   User.createUser(newUser, function (err, user) {
@@ -102,22 +107,52 @@ router.post("/updateUser", urlencodedParser, function (req, res) {
   var fname = req.body.fname;
   var lname = req.body.lname;
   var address = req.body.address;
+  var city = req.body.city;
+  var province = req.body.province;
   var nic = req.body.nic;
   var tel = req.body.tel;
-  var status = req.body.status;
-  var type = req.body.type;
+  var email = req.body.email;
+  var image = req.body.image;
+  var gender = req.body.gender;
 
   var newUser = {
     nic: nic,
-
     password: password,
     firstname: fname,
     lastname: lname,
     address: address,
-
+    province: province,
+    city: city,
     telno: tel,
-    status: status,
-    type: type,
+    email: email,
+    image: image,
+    gender: gender,
+  };
+
+  User.updateUser(id,newUser, function (err, user) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(user);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ user: user}));
+    }
+  });
+});
+
+
+router.post("/updateUserPassAndEmail", urlencodedParser, function (req, res) {
+  console.log("User Updating");
+ // var username = req.body.username;
+ var id = req.body.id;
+  var password = req.body.password;
+  var email = req.body.email;
+
+  var newUser = {
+    password: password,
+    email: email
   };
 
   User.updateUser(id,newUser, function (err, user) {
@@ -152,6 +187,207 @@ router.post("/deleteUser", urlencodedParser, function (req, res) {
 
 
 
+
+router.post("/registerAccount", urlencodedParser, function (req, res) {
+  console.log("Register Account Start");
+  
+  var userId = req.body.userId;
+  var accountNo = req.body.accountNo;
+  var usageLimit = '500.00';
+  var isConnected = req.body.isConnected;
+
+  var newAccount = {
+    accountNo: accountNo,
+    usageLimit: usageLimit,
+    isConnected: isConnected,
+    userId: userId
+  };
+
+  Account.createAccounts(newAccount, function (err, account) {
+    if (err) {
+      console.log("errors " + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.post("/updateAccount", urlencodedParser, function (req, res) {
+  console.log("Update Account Start");
+  var AccId = req.body.AccId;
+  var accountNo = req.body.accountNo;
+  var usageLimit = req.body.usageLimit;
+  var isConnected = req.body.isConnected;
+  var userId = req.body.userId;
+
+  var newAccount = {
+    accountNo: accountNo,
+    usageLimit: usageLimit,
+    isConnected: isConnected,
+    userId: userId,
+  };
+
+  Account.updateAccounts(AccId,newAccount, function (err, account) {
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.get("/getAccount", urlencodedParser, function (req, res) {
+  Account.getAccounts(function(err, account){
+    if (err) {
+      console.log("errors :-" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.post("/deleteAccount", urlencodedParser, function (req, res) {
+  console.log("Account Deleting");
+  
+  var AccId = req.body.AccId;
+  
+  Account.deleteAccounts(AccId, function (err, account) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.post("/getOneAccount", urlencodedParser, function (req, res) {
+  var AccId = req.body.AccId;
+  Account.getAccountsById(AccId, function(err, account){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.post("/getOneAccountByUserId", urlencodedParser, function (req, res) {
+  var userid = req.body.userid;
+  Account.getOneAccountByUserId(userid, function(err, account){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.post("/getOneAccountByAccNo", urlencodedParser, function (req, res) {
+  var accountNo = req.body.accountNo;
+  Account.getOneAccountByAccNo(accountNo, function(err, account){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.post("/getManyAccountByUserId", urlencodedParser, function (req, res) {
+  var userid = req.body.userid;
+  Account.getAccountsByUserId(userid, function(err, account){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.post("/updateAccountUsageLimit", urlencodedParser, function (req, res) {
+  console.log("Account Updating Usage Limit");
+ // var username = req.body.username;
+ var id = req.body.id;
+  var usageLimit = req.body.usageLimit;
+
+  var newAccount = {
+    usageLimit
+  };
+
+  Account.updateAccounts(id,newAccount, function (err, account) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+router.post("/updateAccountConnectivity", urlencodedParser, function (req, res) {
+  console.log("Account Updating");
+ // var username = req.body.username;
+ var id = req.body.id;
+ var isConnected = req.bodyisConnected;
+
+  var newAccount = {
+    isConnected: isConnected,
+  };
+
+  Account.updateUser(id,newAccount, function (err, account) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
+ 
 
 router.post("/registerEmployee", urlencodedParser, function (req, res) {
   console.log("Register Employee Start");
@@ -248,7 +484,7 @@ router.get("/getEmployees", urlencodedParser, function (req, res) {
   });
 });
 
-router.get("/getOneEmployee", urlencodedParser, function (req, res) {
+router.post("/getOneEmployee", urlencodedParser, function (req, res) {
   var id = req.body.id;
   Employee.getEmployeeById(id, function(err, employee){
     if (err) {
@@ -338,7 +574,7 @@ router.post("/deleteReqType", urlencodedParser, function (req, res) {
   });
 });
 
-router.get("/getOneReqType", urlencodedParser, function (req, res) {
+router.post("/getOneReqType", urlencodedParser, function (req, res) {
   var type = req.body.type;
   ReqType.getReqTypeByName(type, function(err, reqType){
     if (err) {
@@ -411,7 +647,7 @@ router.post("/deleteEType", urlencodedParser, function (req, res) {
   });
 });
 
-router.get("/getOneEType", urlencodedParser, function (req, res) {
+router.post("/getOneEType", urlencodedParser, function (req, res) {
   var type = req.body.type;
   EType.getETypeByName(type, function(err, eType){
     if (err) {
@@ -484,7 +720,7 @@ router.post("/deletePriceDetail", urlencodedParser, function (req, res) {
   });
 });
 
-router.get("/getOnePriceDetail", urlencodedParser, function (req, res) {
+router.post("/getOnePriceDetail", urlencodedParser, function (req, res) {
   var id = req.body.id;
   PriceDetail.getPriceDetailById(id, function(err, priceDetail){
     if (err) {
@@ -506,11 +742,11 @@ router.get("/getOnePriceDetail", urlencodedParser, function (req, res) {
 router.post("/registerPayment", urlencodedParser, function (req, res) {
   console.log("Register Payment Start");
   
-  var userId = req.body.userId;
+  var accountId = req.body.accountId;
   var paymentData = req.body.pay;
   var newPayment = {
     paymentData: paymentData,
-    userId: userId
+    accountId: accountId
   };
 
   Payment.createPayment(newPayment, function (err, payment) {
@@ -529,11 +765,11 @@ router.post("/registerPayment", urlencodedParser, function (req, res) {
 router.post("/updatePayment", urlencodedParser, function (req, res) {
   console.log("Update Payment Start");
   var id = req.body.id;
-  var userId = req.body.userId;
+  var accountId = req.body.accountId;
   var paymentData = req.body.pay;
   var newPayment = {
     paymentData: paymentData,
-    userId: userId
+    accountId: accountId,
   };
 
   Payment.updatePayment(id,newPayment, function (err, payment) {
@@ -582,7 +818,7 @@ router.post("/deletePayment", urlencodedParser, function (req, res) {
   });
 });
 
-router.get("/getOnePayment", urlencodedParser, function (req, res) {
+router.post("/getOnePayment", urlencodedParser, function (req, res) {
   var id = req.body.id;
   Payment.getPaymentById(id, function(err, payment){
     if (err) {
@@ -598,19 +834,86 @@ router.get("/getOnePayment", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/getManyPayment", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  Payment.getPaymentByAccountId(accountId, function(err, payment){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
+
+router.post("/getManyPaymentByDate", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  var date = req.body.date;
+  Payment.getPaymentByDate(accountId,date, function(err, payment){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
+
+// router.post("/getSumPaymentByDate", urlencodedParser, function (req, res) {
+//   var accountId = req.body.accountId;
+//   var date = req.body.date;
+//   Payment.getSumPaymentByDate(accountId,date, function(err, payment){
+//     if (err) {
+//       console.log("errors" + err.message);
+//       res.sendStatus(400);
+//       return;
+//     } else {
+//       console.log(payment);
+//       res.setHeader("Content-Type", "application/json");
+//      // res.body(employee);
+//       res.end(JSON.stringify({ payment: payment}));
+//     }
+//   });
+// });
+
+router.post("/getSumPayment", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  Payment.getSumPayment(accountId, function(err, payment){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
 
 
 
 router.post("/registerRequest", urlencodedParser, function (req, res) {
   console.log("Register Request Start");
   
-  var userId = req.body.userId;
+  var accountId = req.body.accountId;
   var requestData = req.body.request;
   var Type = req.body.type;
+  var isPending = req.body.isPending;
   var newRequest = {
     requestData: requestData,
-    userId: userId,
-    Type: Type
+    accountId: accountId,
+    Type: Type,
+    isPending:isPending
   };
 
   Request.createRequest(newRequest, function (err, request) {
@@ -659,7 +962,7 @@ router.post("/deleteRequest", urlencodedParser, function (req, res) {
   });
 });
 
-router.get("/getOneRequest", urlencodedParser, function (req, res) {
+router.post("/getOneRequest", urlencodedParser, function (req, res) {
   var id = req.body.id;
   Request.getRequestById(id, function(err, request){
     if (err) {
@@ -675,17 +978,58 @@ router.get("/getOneRequest", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/getManyRequest", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  Request.getRequestByAccountId(accountId, function(err, request){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(request);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ request: request}));
+    }
+  });
+});
 
+router.post("/getLatestRequest", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  Request.getLatestRequestByAccountId(accountId, function(err, request){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      // console.log(request);
+      // res.setHeader("Content-Type", "application/json");
+      // res.end(JSON.stringify({ request: request}));
+      Request.getRequestById(request, function(err, request){
+        if (err) {
+          console.log("errors" + err.message);
+          res.sendStatus(400);
+          return;
+        } else {
+          console.log(request);
+          res.setHeader("Content-Type", "application/json");
+         // res.body(employee);
+          res.end(JSON.stringify({ request: request}));
+        }
+      });
+    }
+  });
+});
 
 
 router.post("/registerUsage", urlencodedParser, function (req, res) {
   console.log("Register Usage Start");
   
-  var userId = req.body.userId;
+  var accountId = req.body.accountId;
   var usageData = req.body.usage;
   var newUsage = {
     usageData: usageData,
-    userId: userId
+    accountId: accountId
   };
 
   Usage.createUsage(newUsage, function (err, usage) {
@@ -701,14 +1045,42 @@ router.post("/registerUsage", urlencodedParser, function (req, res) {
   });
 });
 
+/////////////////Atmega URL Parameter
+router.post("/registerUsageAtmega", function (req, res) {
+  console.log("Register Usage Start");
+  
+  var accountId = req.query.accountId;
+  var usageData = req.query.usage;
+  console.log(accountId);
+  console.log(usageData);
+
+  var newUsage = {
+    usageData: usageData,
+    accountId: accountId
+  };
+
+  Usage.createUsage(newUsage, function (err, usage) {
+    if (err) {
+      console.log("errors " + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+////////////////////////////////
+
 router.post("/updateUsage", urlencodedParser, function (req, res) {
   console.log("Update Usage Start");
   var id = req.body.id;
-  var userId = req.body.userId;
+  var accountId = req.body.accountId;
   var usageData = req.body.usage;
   var newUsage = {
     usageData: usageData,
-    userId: userId
+    accountId: accountId
   };
 
   Usage.updateUsage(id,newUsage, function (err, usage) {
@@ -757,9 +1129,9 @@ router.post("/deleteUsage", urlencodedParser, function (req, res) {
   });
 });
 
-router.get("/getOneUsage", urlencodedParser, function (req, res) {
-  var id = req.body.id;
-  Usage.getUsageById(id, function(err, usage){
+router.post("/getManyUsage", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  Usage.getUsageByAccountId(accountId, function(err, usage){
     if (err) {
       console.log("errors" + err.message);
       res.sendStatus(400);
@@ -773,4 +1145,85 @@ router.get("/getOneUsage", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/getManyUsageByDate", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  var date = req.body.date;
+  Usage.getUsageByDate(accountId,date, function(err, usage){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
+router.post("/getManyUsageByTwoDates", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  var date1 = req.body.date1;
+  var date2 = req.body.date2;
+  Usage.getUsageByTWoDates(accountId,date1,date2, function(err, usage){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
+router.post("/getSumUsageByDate", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  var date = req.body.date;
+  Usage.getSumUsageByDate(accountId,date, function(err, usage){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
+
+router.post("/Verify", urlencodedParser, function (req, res) {
+  var nic = req.body.nic;
+  var password = req.body.password;
+  User.getUserByNic(nic, function(err, user){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      User.comparePassword(password, user.password, function(err, isMatch) {
+        if (err) throw err;
+        if (isMatch) {
+          console.log("Password Matched");
+          res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({msg: "User Authenticated", isMatched: "True", user: user}));
+          //return done(null, user);
+        } else {
+          console.log("Invalid password");
+          //return done(null, false, { message: "Invalid password" });
+          res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({msg: "User Not Authenticated", isMatched: "False"}));
+        }
+      });
+}
+});
+});
 module.exports = router;

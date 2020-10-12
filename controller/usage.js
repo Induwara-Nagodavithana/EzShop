@@ -1,4 +1,5 @@
 var Usage = require("../models/usage");
+const Sequelize = require("sequelize");
 
 
   module.exports.createUsage = function (newUsage, callback) {
@@ -30,6 +31,68 @@ var Usage = require("../models/usage");
     });
   };
   
+  module.exports.getUsageByAccountId = function (accountId, callback) {
+    Usage.findAll({
+      where: { accountId: accountId},
+    }).then((usage) => {
+      callback(null, usage);
+    });
+  };
+
+  module.exports.getUsageByDate = function (accountId,date, callback) {
+    const Op = Sequelize.Op;
+    console.log(date);
+    Usage.findAll({
+      where: { 
+        accountId: accountId,
+        UpdatedAt: { [Op.startsWith]: date },
+        
+
+      },
+    }).then((usage) => {
+      callback(null, usage);
+    });
+  };
+
+  module.exports.getUsageByTWoDates = function (accountId,date1,date2, callback) {
+    const Op = Sequelize.Op;
+    console.log(date1);
+    Usage.findAll({
+      where: { 
+        accountId: accountId,
+        [Op.or]: [
+          {
+          UpdatedAt: { 
+            [Op.startsWith]: date1 
+          }
+        },
+        {
+          UpdatedAt: { 
+            [Op.startsWith]: date2 
+          }
+        },
+      ],
+        
+
+      },
+    }).then((usage) => {
+      callback(null, usage);
+    });
+  };
+
+  module.exports.getSumUsageByDate = function (accountId,date, callback) {
+    const Op = Sequelize.Op;
+    console.log(date);
+    Usage.sum('usageData',{
+      where: { 
+        accountId: accountId,
+        UpdatedAt: { [Op.startsWith]: date },
+      },
+    }).then((usage) => {
+      callback(null, usage);
+    });
+  };
+
   module.exports.updateUsage = function (id, newUsage, callback) {
     console.log("Update Usage");
   

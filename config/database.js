@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-db = new Sequelize("swms", "root", "1234", {
+db = new Sequelize("swmsNew", "root", "1234", {
   host: "localhost",
   dialect: "mysql",
   pool: {

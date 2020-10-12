@@ -10,10 +10,6 @@ var User = db.define(
       allowNull: false,
       unique: true,
     },
-    accountno: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
     password: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -30,6 +26,10 @@ var User = db.define(
       type: Sequelize.STRING,
       // allowNull defaults to true
     },
+    gender: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     address: {
       type: Sequelize.STRING,
       // allowNull defaults to true
@@ -41,6 +41,14 @@ var User = db.define(
     province: {
       type: Sequelize.STRING,
       allowNull: false,
+    },
+    email: {
+      type: Sequelize.STRING,
+      // allowNull: false,
+    },
+    image: {
+      type: Sequelize.STRING,
+      // allowNull: false,
     },
     
   },

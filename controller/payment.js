@@ -1,5 +1,7 @@
 var Payment = require("../models/payment");
 
+const Sequelize = require("sequelize");
+
 module.exports.createPayment = function (newPayment, callback) {
     console.log("Create Payment");
   
@@ -60,6 +62,53 @@ module.exports.createPayment = function (newPayment, callback) {
   module.exports.getPaymentById = function (id, callback) {
     Payment.findOne({
       where: {  id: id},
+    }).then((payment) => {
+      callback(null, payment);
+    });
+  };
+
+  module.exports.getPaymentByAccountId = function (accountId, callback) {
+    Payment.findAll({
+      where: {  accountId: accountId},
+      order: [['UpdatedAt', 'DESC'],]
+    }).then((payment) => {
+      callback(null, payment);
+    });
+  };
+
+  module.exports.getPaymentByDate = function (accountId,date, callback) {
+    const Op = Sequelize.Op;
+    console.log(date);
+    Payment.findAll({
+      where: { 
+        accountId: accountId,
+        UpdatedAt: { [Op.startsWith]: date },
+        
+
+      },
+    }).then((payment) => {
+      callback(null, payment);
+    });
+  };
+
+  module.exports.getSumPaymentByDate = function (accountId,date, callback) {
+    const Op = Sequelize.Op;
+    console.log(date);
+    Payment.sum('paymentData',{
+      where: { 
+        accountId: accountId,
+        UpdatedAt: { [Op.startsWith]: date },
+      },
+    }).then((payment) => {
+      callback(null, payment);
+    });
+  };
+
+  module.exports.getSumPayment = function (accountId, callback) {
+    Payment.sum('paymentData',{
+      where: { 
+        accountId: accountId,
+      }   
     }).then((payment) => {
       callback(null, payment);
     });

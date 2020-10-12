@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
 
 const db = require("../config/database");
-var User = require("./user");
+const Accounts = require("./accounts");
+// var User = require("./user");
 
 var Usage = db.define(
   "usage",
@@ -19,13 +20,13 @@ var Usage = db.define(
     freezeTableName: true,
   }
 );
-User.hasMany(Usage, {
+Accounts.hasMany(Usage, {
     foreignKey: {
       allowNull: false,
      // name: "id",
     },
   });
   
-  Usage.belongsTo(User);
+  Usage.belongsTo(Accounts);
 
 module.exports = Usage;

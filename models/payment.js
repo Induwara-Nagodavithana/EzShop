@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
 
 const db = require("../config/database");
-var User = require("./user");
+const Accounts = require("./accounts");
+// var User = require("./user");
 
 var Payment = db.define(
   "payment",
@@ -20,7 +21,7 @@ var Payment = db.define(
   }
 );
 
-User.hasMany(Payment, {
+Accounts.hasMany(Payment, {
     foreignKey: {
       allowNull: false,
       //name: "id",
@@ -28,6 +29,6 @@ User.hasMany(Payment, {
     },
   });
   
-  Payment.belongsTo(User);
+  Payment.belongsTo(Accounts);
 
 module.exports = Payment;

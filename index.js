@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
+// var passport = require("passport");
+
+// const passportJWTInit = require("./auth/passport_jwt");
 //Database
 var db = require("./config/database");
 
@@ -18,6 +21,14 @@ app.get("/", (req, res) => {
 });
 
 var api = require("./routes/api");
+var auth = require("./routes/auth");
+// app.use(passport.initialize());
+// app.use(passport.session());
+// passportJWTInit();
+
+
+
+
 app.use("/api", api);
 
 app.listen(port, () => {

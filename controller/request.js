@@ -1,5 +1,7 @@
 var Request = require("../models/requests");
 
+const Sequelize = require("sequelize");
+
 module.exports.createRequest = function (newRequest, callback) {
     console.log("Create Payment");
   
@@ -46,3 +48,32 @@ module.exports.createRequest = function (newRequest, callback) {
       callback(null, request);
     });
   };
+
+  module.exports.getRequestByAccountId = function (accountId, callback) {
+    Request.findAll({
+      where: { accountId: accountId},
+      order: [['UpdatedAt', 'DESC'],]
+    }).then((request) => {
+      callback(null, request);
+    });
+  };
+
+  module.exports.getLatestRequestByAccountId = function (accountId, callback) {
+    const Op = Sequelize.Op;
+    Request.max('id',{
+      where: { accountId: accountId},
+      
+}).then((request) => {
+      callback(null, request);
+    });
+  };
+
+//   module.exports.getLatestRequestByAccountId = function (accountId, callback) {
+//     const Op = Sequelize.Op;
+//     Request.max('id',{
+//       where: { accountId: accountId},
+      
+// }).then((request) => {
+//       callback(null, request);
+//     });
+//   };
