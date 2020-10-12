@@ -1226,4 +1226,21 @@ router.post("/Verify", urlencodedParser, function (req, res) {
 }
 });
 });
+
+router.post("/VerifyToken", urlencodedParser, function (req, res) {
+  var Token = req.body.Token;
+    if (Token=='Aa123456789') {
+      console.log("Token Matched");
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({msg: "User Authenticated", isMatched: "True"}));
+    } else {
+      console.log("Token Not Matched");
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({msg: "User Not Authenticated", isMatched: "False"}));
+    }
+  
+});
+
 module.exports = router;
