@@ -1213,14 +1213,14 @@ router.post("/Verify", urlencodedParser, function (req, res) {
           console.log("Password Matched");
           res.setHeader("Content-Type", "application/json");
      // res.body(employee);
-      res.end(JSON.stringify({msg: "User Authenticated", isMatched: "True", user: user}));
+      res.end(JSON.stringify({msg: "User Authenticated",token: "Aa123456789", isMatched: "True", user: user}));
           //return done(null, user);
         } else {
           console.log("Invalid password");
           //return done(null, false, { message: "Invalid password" });
           res.setHeader("Content-Type", "application/json");
      // res.body(employee);
-      res.end(JSON.stringify({msg: "User Not Authenticated", isMatched: "False"}));
+      res.end(JSON.stringify({msg: "User Not Authenticated",token: "", isMatched: "False"}));
         }
       });
 }
