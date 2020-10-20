@@ -56,6 +56,22 @@ router.post("/getOneUser", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/getOneUserByNIC", urlencodedParser, function (req, res) {
+  var nic = req.body.nic;
+  User.getUserByNic(nic, function(err, user){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(user);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ user: user}));
+    }
+  });
+});
+
 router.post("/registerUser", urlencodedParser, function (req, res) {
   console.log("Register USer Start");
  // var username = req.body.username;
@@ -1198,6 +1214,9 @@ router.post("/getSumUsageByDate", urlencodedParser, function (req, res) {
 });
 
 
+
+
+
 router.post("/Verify", urlencodedParser, function (req, res) {
   var nic = req.body.nic;
   var password = req.body.password;
@@ -1229,7 +1248,7 @@ router.post("/Verify", urlencodedParser, function (req, res) {
 
 router.post("/VerifyToken", urlencodedParser, function (req, res) {
   var Token = req.body.Token;
-    if (Token=='Aa123456789') {
+    if (Token==Aa123456789) {
       console.log("Token Matched");
       res.setHeader("Content-Type", "application/json");
      // res.body(employee);
