@@ -47,6 +47,14 @@ var Employee = db.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    email: {
+      type: Sequelize.STRING,
+      // allowNull: false,
+    },
+    image: {
+      type: Sequelize.STRING,
+      // allowNull: false,
+    },
   },
   {
     timestamps: true,

@@ -420,6 +420,8 @@ router.post("/registerEmployee", urlencodedParser, function (req, res) {
  // var status = req.body.status;
   var type = req.body.type;
   var gender = req.body.gender;
+  var email = req.body.email;
+  var image = req.body.image;
 
   var newEmployee = {
     nic: nic,
@@ -433,6 +435,8 @@ router.post("/registerEmployee", urlencodedParser, function (req, res) {
     contactno: tel,
     type: type,
     gender:gender,
+    email: email,
+    image: image,
   };
 
   Employee.createEmployee(newEmployee, function (err, employee) {
@@ -462,6 +466,8 @@ router.post("/updateEmployee", urlencodedParser, function (req, res) {
  // var status = req.body.status;
   var type = req.body.type;
   var gender = req.body.gender;
+  var email = req.body.email;
+  var image = req.body.image;
 
   var newEmployee = {
     nic: nic,
@@ -474,6 +480,8 @@ router.post("/updateEmployee", urlencodedParser, function (req, res) {
     telno: tel,
     type: type,
     gender:gender,
+    email: email,
+    image: image,
   };
 
   Employee.updateEmployee(id,newEmployee, function (err, employee) {
