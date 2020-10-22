@@ -419,6 +419,7 @@ router.post("/registerEmployee", urlencodedParser, function (req, res) {
   var tel = req.body.contactNo;
  // var status = req.body.status;
   var type = req.body.type;
+  var gender = req.body.gender;
 
   var newEmployee = {
     nic: nic,
@@ -431,6 +432,7 @@ router.post("/registerEmployee", urlencodedParser, function (req, res) {
     city: city,
     contactno: tel,
     type: type,
+    gender:gender,
   };
 
   Employee.createEmployee(newEmployee, function (err, employee) {
@@ -459,6 +461,7 @@ router.post("/updateEmployee", urlencodedParser, function (req, res) {
   var tel = req.body.tel;
  // var status = req.body.status;
   var type = req.body.type;
+  var gender = req.body.gender;
 
   var newEmployee = {
     nic: nic,
@@ -470,6 +473,7 @@ router.post("/updateEmployee", urlencodedParser, function (req, res) {
 
     telno: tel,
     type: type,
+    gender:gender,
   };
 
   Employee.updateEmployee(id,newEmployee, function (err, employee) {

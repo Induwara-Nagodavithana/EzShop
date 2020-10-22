@@ -1,4 +1,6 @@
 var Employee = require("../models/employees");
+const bcrypt = require("bcryptjs");
+const saltRounds = 5;
 
 module.exports.getEmployeeById = function (id, callback) {
   Employee.findOne({
@@ -20,6 +22,9 @@ module.exports.getEmployees = function (callback) {
 module.exports.createEmployee = function (newEmployee, callback) {
   console.log("Create Employee");
 
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    bcrypt.hash(newEmployee.password, salt, function (err, hash) {
+      newEmployee.password = hash;
   Employee.create(newEmployee)
     .then((employee) => {
       callback(null, employee);
@@ -27,12 +32,16 @@ module.exports.createEmployee = function (newEmployee, callback) {
     .catch((err) => {
       callback(err);
     });
+  });
+});
 };
 module.exports.updateEmployee = function (id, newEmployee, callback) {
   console.log("Update Employee");
 
   // newUser.password = hash;
-
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    bcrypt.hash(newEmployee.password, salt, function (err, hash) {
+      newEmployee.password = hash;
   Employee.update(newEmployee, {
     where: {
       id: id,
@@ -44,6 +53,8 @@ module.exports.updateEmployee = function (id, newEmployee, callback) {
     .catch((err) => {
       callback(err);
     });
+  });
+});
 };
 module.exports.deleteEmployee = function (id, callback) {
   console.log("Delete employee");

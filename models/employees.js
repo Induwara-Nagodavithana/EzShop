@@ -27,6 +27,10 @@ var Employee = db.define(
       type: Sequelize.STRING,
       // allowNull defaults to true
     },
+    gender: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     address: {
       type: Sequelize.STRING,
       // allowNull defaults to true
