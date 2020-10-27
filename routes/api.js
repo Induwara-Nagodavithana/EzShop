@@ -236,6 +236,7 @@ router.post("/registerAccount", urlencodedParser, function (req, res) {
   });
 });
 
+
 router.post("/updateAccount", urlencodedParser, function (req, res) {
   console.log("Update Account Start");
   var AccId = req.body.AccId;
