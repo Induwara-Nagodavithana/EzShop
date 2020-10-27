@@ -211,12 +211,16 @@ router.post("/registerAccount", urlencodedParser, function (req, res) {
   var accountNo = req.body.accountNo;
   var usageLimit = '500.00';
   var isConnected = req.body.isConnected;
+  var address = req.body.address;
+  var city = req.body.city;
 
   var newAccount = {
     accountNo: accountNo,
     usageLimit: usageLimit,
     isConnected: isConnected,
-    userId: userId
+    userId: userId,
+    address: address,
+    city: city,
   };
 
   Account.createAccounts(newAccount, function (err, account) {
@@ -239,12 +243,16 @@ router.post("/updateAccount", urlencodedParser, function (req, res) {
   var usageLimit = req.body.usageLimit;
   var isConnected = req.body.isConnected;
   var userId = req.body.userId;
+  var address = req.body.address;
+  var city = req.body.city;
 
   var newAccount = {
     accountNo: accountNo,
     usageLimit: usageLimit,
     isConnected: isConnected,
     userId: userId,
+    address: address,
+    city: city,
   };
 
   Account.updateAccounts(AccId,newAccount, function (err, account) {
@@ -468,6 +476,8 @@ router.post("/updateEmployee", urlencodedParser, function (req, res) {
   var gender = req.body.gender;
   var email = req.body.email;
   var image = req.body.image;
+  var city = req.body.city;
+  var province = req.body.province;
 
   var newEmployee = {
     nic: nic,
@@ -476,6 +486,8 @@ router.post("/updateEmployee", urlencodedParser, function (req, res) {
     firstname: fname,
     lastname: lname,
     address: address,
+    province: province,
+    city: city,
 
     telno: tel,
     type: type,

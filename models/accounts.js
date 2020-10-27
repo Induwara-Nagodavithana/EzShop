@@ -18,7 +18,15 @@ var Accounts = db.define(
     isConnected: {
       type: Sequelize.INTEGER,
       allowNull: false,
-    }
+    },
+    address: {
+      type: Sequelize.STRING,
+      // allowNull defaults to true
+    },
+    city: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     
   },
   {
