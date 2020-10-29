@@ -28,12 +28,11 @@ module.exports.createMonthlyPayment = function (date, callback) {
     }).then((priceDetail) => {
         // callback(null, priceDetail);
         price = priceDetail.dataValues.price;
-        const Op = Sequelize.Op;
         console.log(date);
         const Op = Sequelize.Op;
         
         Accounts.findAll().then((accounts) => {
-            
+
         //   callback(null, accounts);
         // for (let flag = 0; flag < 10; accId++) {
             console.log("Accounts Finding Start");
