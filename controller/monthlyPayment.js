@@ -14,7 +14,7 @@ var PriceDetail = require("../models/priceDetail");
 module.exports.createMonthlyPayment = function (date, callback) {
     console.log("Create Payment");
 
-    var accId = 1;
+    // var accId = 1;
     // var flag = 0;
     // var datetime = new Date();
     //     console.log(datetime.toISOString().slice(0,7));
@@ -29,18 +29,19 @@ module.exports.createMonthlyPayment = function (date, callback) {
         price = priceDetail.dataValues.price;
         const Op = Sequelize.Op;
         console.log(date);
-        for (let flag = 0; flag < 10; accId++) {
-            
+        // for (let flag = 0; flag < 10; accId++) {
+            for (let accId = 1; accId < 9; accId++) {
             Usage.sum('usageData', {
                 where: {
                     accountId: accId,
                     UpdatedAt: { [Op.startsWith]: date },
                 },
             }).then((usage) => {
-                if (usage==0) {
-                    flag++;
-                }else{
-                    //   callback(null, usage);
+                // if (usage==0) {
+                //     flag++;
+                // }else{
+                //     //   callback(null, usage);
+                //     flag=0;
                 console.log("Payment Start");
                 console.log(price);
                 console.log(usage);
@@ -61,7 +62,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
                     .catch((err) => {
                         callback(err);
                     });
-                }
+                // }
                 
             });  
         }
