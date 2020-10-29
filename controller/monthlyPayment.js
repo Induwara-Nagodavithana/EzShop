@@ -15,7 +15,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
     console.log("Create Payment");
 
     var accId = 1;
-    var flag = 0;
+    // var flag = 0;
     // var datetime = new Date();
     //     console.log(datetime.toISOString().slice(0,7));
 
@@ -29,34 +29,43 @@ module.exports.createMonthlyPayment = function (date, callback) {
         price = priceDetail.dataValues.price;
         const Op = Sequelize.Op;
         console.log(date);
-        Usage.sum('usageData', {
-            where: {
-                accountId: accId,
-                UpdatedAt: { [Op.startsWith]: date },
-            },
-        }).then((usage) => {
-            //   callback(null, usage);
-            console.log("Payment Start");
-            console.log(price);
-            console.log(usage);
-            var monthlyPay = usage * price;
-            monthlyPay=monthlyPay.toFixed(2)
-            console.log(monthlyPay);
-            console.log("Payment xvcv");
-
-            var newPayment = {
-                paymentData: monthlyPay,
-                accountId: accId
-            };
-
-            Payment.create(newPayment)
-                .then((payment) => {
-                    callback(null, payment);
-                })
-                .catch((err) => {
-                    callback(err);
-                });
-        });
+        for (let flag = 0; flag < 10; accId++) {
+            
+            Usage.sum('usageData', {
+                where: {
+                    accountId: accId,
+                    UpdatedAt: { [Op.startsWith]: date },
+                },
+            }).then((usage) => {
+                if (usage==0) {
+                    flag++;
+                }else{
+                    //   callback(null, usage);
+                console.log("Payment Start");
+                console.log(price);
+                console.log(usage);
+                var monthlyPay = usage * price;
+                monthlyPay=monthlyPay.toFixed(2)
+                console.log(monthlyPay);
+                console.log("Payment xvcv");
+    
+                var newPayment = {
+                    paymentData: monthlyPay,
+                    accountId: accId
+                };
+    
+                Payment.create(newPayment)
+                    .then((payment) => {
+                        callback(null, payment);
+                    })
+                    .catch((err) => {
+                        callback(err);
+                    });
+                }
+                
+            });  
+        }
+        
 
     });
 
