@@ -21,14 +21,15 @@ module.exports.createMonthlyPayment = function (date, callback) {
   PriceDetail.getPriceDetailById(id, function(err, priceDetail){
     if (err) {
       console.log("errors" + err.message);
-      res.sendStatus(400);
+      callback(err);
+    //   res.sendStatus(400);
       return;
     } else {
       console.log(priceDetail);
       price=priceDetail;
-      res.setHeader("Content-Type", "application/json");
-     // res.body(employee);
-      res.end(JSON.stringify({ priceDetail: priceDetail}));
+    //   res.setHeader("Content-Type", "application/json");
+    //  // res.body(employee);
+    //   res.end(JSON.stringify({ priceDetail: priceDetail}));
     }
   });
     // for ( flag = 0; flag < 5; accId++,flag++) {
@@ -36,7 +37,8 @@ module.exports.createMonthlyPayment = function (date, callback) {
         Usage.getSumUsageByDate(accId,date, function(err, usage){
             if (err) {
               console.log("errors" + err.message);
-              res.sendStatus(400);
+              callback(err);
+            //   res.sendStatus(400);
               return;
             } else {
               console.log(usage);
@@ -50,12 +52,14 @@ module.exports.createMonthlyPayment = function (date, callback) {
               Payment.createPayment(newPayment, function (err, payment) {
                 if (err) {
                   console.log("errors " + err.message);
-                  res.sendStatus(400);
+                  callback(err);
+                //   res.sendStatus(400);
                   return;
                 } else {
                   console.log(payment);
-                  res.setHeader("Content-Type", "application/json");
-                  res.end(JSON.stringify({ payment: payment}));
+                  callback(null, payment);
+                //   res.setHeader("Content-Type", "application/json");
+                //   res.end(JSON.stringify({ payment: payment}));
                 }
               });
 
