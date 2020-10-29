@@ -17,9 +17,11 @@ module.exports.createMonthlyPayment = function (date, callback) {
 
     var id = 1;
     var price;
+    
+    getPaymentDone;
 
     async function getPaymentDone(){
-         price = getPriceDetails;
+         price = await getPriceDetails;
         getPayment;
     }
 
