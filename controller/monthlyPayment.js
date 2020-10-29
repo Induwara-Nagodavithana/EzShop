@@ -30,7 +30,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
         const Op = Sequelize.Op;
         console.log(date);
         // for (let flag = 0; flag < 10; accId++) {
-            for (let accId = 1; accId < 9; accId++) {
+            for (let accId = 1; accId < 12; accId++) {
             Usage.sum('usageData', {
                 where: {
                     accountId: accId,
