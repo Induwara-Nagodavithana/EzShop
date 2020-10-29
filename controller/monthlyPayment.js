@@ -60,7 +60,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
                     console.log("Payment xvcv");
         
                     var newPayment = {
-                        paymentData: monthlyPay,
+                        paymentData: -monthlyPay,
                         accountId: accounts[i].id
                     };
         
