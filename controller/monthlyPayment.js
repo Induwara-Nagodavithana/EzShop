@@ -19,7 +19,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
     var price;
 
     async function getPaymentDone(){
-         price = await getPriceDetails;
+         price = getPriceDetails;
         getPayment;
     }
 
