@@ -18,7 +18,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
 
     var id = 1;
     var price;
-  PriceDetail.getPriceDetailById(id, function(err, priceDetail){
+   PriceDetail.getPriceDetailById(id, function(err, priceDetail){
     if (err) {
       console.log("errors" + err.message);
       callback(err);
@@ -32,13 +32,13 @@ module.exports.createMonthlyPayment = function (date, callback) {
       console.log("12312312dgd");
       console.log(priceDetail.dataValues.price);
       console.log("Finish");
-      price=23.54;
+      price=priceDetail.dataValues.price;
     //   res.setHeader("Content-Type", "application/json");
     //  // res.body(employee);
     //   res.end(JSON.stringify({ priceDetail: priceDetail}));
     }
-  });
-    // for ( flag = 0; flag < 5; accId++,flag++) {
+  }).then((price) => {
+       // for ( flag = 0; flag < 5; accId++,flag++) {
         var monthlyPay=0;
         Usage.getSumUsageByDate(accId,date, function(err, usage){
             if (err) {
@@ -47,10 +47,12 @@ module.exports.createMonthlyPayment = function (date, callback) {
             //   res.sendStatus(400);
               return;
             } else {
+                console.log("Payment Start");
                 console.log(price);
               console.log(usage);
               monthlyPay = usage*price;
               console.log(monthlyPay);
+              console.log("Payment xvcv");
 
               var newPayment = {
                 paymentData: monthlyPay,
@@ -79,6 +81,11 @@ module.exports.createMonthlyPayment = function (date, callback) {
           });
         
     // }
+        }).catch((err) => {
+            callback(err);
+          });
+  
+   
   
     
   };
