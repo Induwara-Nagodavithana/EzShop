@@ -41,8 +41,10 @@ module.exports.createMonthlyPayment = function (date, callback) {
             //   res.sendStatus(400);
               return;
             } else {
+                console.log(price);
               console.log(usage);
               monthlyPay = usage*price;
+              console.log(monthlyPay);
 
               var newPayment = {
                 paymentData: monthlyPay,
