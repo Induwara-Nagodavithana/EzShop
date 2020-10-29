@@ -40,6 +40,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
             console.log(price);
             console.log(usage);
             var monthlyPay = usage * price;
+            monthlyPay=monthlyPay.toFixed(2)
             console.log(monthlyPay);
             console.log("Payment xvcv");
 
