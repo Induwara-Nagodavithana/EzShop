@@ -88,3 +88,10 @@ module.exports.createAccounts = function (newAccounts, callback) {
       callback(null, accounts);
     });
   };
+
+  module.exports.getLatestAccountId = function (callback) {
+    const Op = Sequelize.Op;
+    Accounts.max('id').then((accounts) => {
+      callback(null, accounts);
+    });
+  };

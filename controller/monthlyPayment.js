@@ -6,6 +6,7 @@ const Sequelize = require("sequelize");
 var Payment = require("../models/payment");
 var Usage = require("../models/usage");
 var PriceDetail = require("../models/priceDetail");
+var Accounts = require("../models/accounts");
 
 
 
@@ -29,44 +30,54 @@ module.exports.createMonthlyPayment = function (date, callback) {
         price = priceDetail.dataValues.price;
         const Op = Sequelize.Op;
         console.log(date);
+        const Op = Sequelize.Op;
+        
+        Accounts.findAll().then((accounts) => {
+        //   callback(null, accounts);
         // for (let flag = 0; flag < 10; accId++) {
-            for (let accId = 1; accId < 12; accId++) {
-            Usage.sum('usageData', {
-                where: {
-                    accountId: accId,
-                    UpdatedAt: { [Op.startsWith]: date },
-                },
-            }).then((usage) => {
-                // if (usage==0) {
-                //     flag++;
-                // }else{
-                //     //   callback(null, usage);
-                //     flag=0;
-                console.log("Payment Start");
-                console.log(price);
-                console.log(usage);
-                var monthlyPay = usage * price;
-                monthlyPay=monthlyPay.toFixed(2)
-                console.log(monthlyPay);
-                console.log("Payment xvcv");
-    
-                var newPayment = {
-                    paymentData: monthlyPay,
-                    accountId: accId
-                };
-    
-                Payment.create(newPayment)
-                    .then((payment) => {
-                        console.log(payment);
-                        // callback(null, payment);
-                    })
-                    .catch((err) => {
-                        callback(err);
-                    });
-                // }
-                
-            });  
-        }
+            console.log("Accounts Finding Start");
+                    console.log(accounts[0]);
+                    console.log("fdsfdfg");
+                    console.log(accounts[0].id);
+            for (let i = 0; i < accounts.length; i++) {
+                Usage.sum('usageData', {
+                    where: {
+                        accountId: accounts[i].id,
+                        UpdatedAt: { [Op.startsWith]: date },
+                    },
+                }).then((usage) => {
+                    // if (usage==0) {
+                    //     flag++;
+                    // }else{
+                    //     //   callback(null, usage);
+                    //     flag=0;
+                    console.log("Payment Start");
+                    console.log(price);
+                    console.log(usage);
+                    var monthlyPay = usage * price;
+                    monthlyPay=monthlyPay.toFixed(2)
+                    console.log(monthlyPay);
+                    console.log("Payment xvcv");
+        
+                    var newPayment = {
+                        paymentData: monthlyPay,
+                        accountId: accounts[i].id
+                    };
+        
+                    Payment.create(newPayment)
+                        .then((payment) => {
+                            console.log(payment);
+                            // callback(null, payment);
+                        })
+                        .catch((err) => {
+                            callback(err);
+                        });
+                    // }
+                    
+                });  
+            }
+        });
+        
         var myJson = {'key':'Done'};
         callback(null, myJson);
 
