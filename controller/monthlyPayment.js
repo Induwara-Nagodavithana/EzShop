@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 var Payment = require("../models/payment");
 var Usage = require("../controller/usage");
+var PriceDetail = require("../controller/priceDetail");
 
 
 
