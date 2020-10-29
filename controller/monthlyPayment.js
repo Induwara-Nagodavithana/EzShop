@@ -23,9 +23,9 @@ module.exports.createMonthlyPayment = function (date, callback) {
             } else {
               console.log(usage);
               console.log('1ff');
-              console.log(usage.store_config);
-              console.log('2fgh');
-              console.log(usage.store_config[0]);
+            //   console.log(usage.store_config);
+            //   console.log('2fgh');
+            //   console.log(usage.store_config[0]);
               console.log('3fgh');
               console.log(usage);
               console.log('4fgh');
