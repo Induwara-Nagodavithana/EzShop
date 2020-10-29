@@ -25,8 +25,14 @@ module.exports.createMonthlyPayment = function (date, callback) {
     //   res.sendStatus(400);
       return;
     } else {
+        console.log("Start");
       console.log(priceDetail);
-      price=priceDetail;
+      console.log("12312312dgd");
+      console.log(priceDetail.dataValues);
+      console.log("12312312dgd");
+      console.log(priceDetail.dataValues.price);
+      console.log("Finish");
+      price=23.54;
     //   res.setHeader("Content-Type", "application/json");
     //  // res.body(employee);
     //   res.end(JSON.stringify({ priceDetail: priceDetail}));
