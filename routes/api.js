@@ -10,6 +10,7 @@ var ReqType = require("../controller/reqTypes");
 var Request = require("../controller/request");
 var Usage = require("../controller/usage");
 var Account = require("../controller/account");
+var MonthlyPayment = require("../controller/monthlyPayment");
 // var Center = require("../models/centers");
 //var passport = require("passport");
 const bcrypt = require("bcryptjs");
@@ -1287,4 +1288,19 @@ router.post("/VerifyToken", urlencodedParser, function (req, res) {
   
 });
 
+router.post("/MonthlyPayment", urlencodedParser, function (req, res) {
+  var date = req.body.date;
+  MonthlyPayment.createMonthlyPayment(date, function(err, usage){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
 module.exports = router;
