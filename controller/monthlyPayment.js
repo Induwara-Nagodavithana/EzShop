@@ -5,6 +5,8 @@ var PriceDetail = require("../controller/priceDetail");
 
 
 
+
+
 module.exports.createMonthlyPayment = function (date, callback) {
     console.log("Create Payment");
 
@@ -15,76 +17,84 @@ module.exports.createMonthlyPayment = function (date, callback) {
 
     var id = 1;
     var price;
-   await PriceDetail.getPriceDetailById(id, function(err, priceDetail){
-    if (err) {
-      console.log("errors" + err.message);
-      callback(err);
-    //   res.sendStatus(400);
-      return;
-    } else {
-        console.log("Start");
-      console.log(priceDetail);
-      console.log("12312312dgd");
-      console.log(priceDetail.dataValues);
-      console.log("12312312dgd");
-      console.log(priceDetail.dataValues.price);
-      console.log("Finish");
-      price=priceDetail.dataValues.price;
-    //   res.setHeader("Content-Type", "application/json");
-    //  // res.body(employee);
-    //   res.end(JSON.stringify({ priceDetail: priceDetail}));
+
+    async function getPaymentDone(){
+         price = await getPriceDetails;
+        getPayment;
     }
-  }).then((price) => {
-       // for ( flag = 0; flag < 5; accId++,flag++) {
-        var monthlyPay=0;
-        Usage.getSumUsageByDate(accId,date, function(err, usage){
+
+     function getPriceDetails(){
+        PriceDetail.getPriceDetailById(id, function(err, priceDetail){
             if (err) {
               console.log("errors" + err.message);
               callback(err);
             //   res.sendStatus(400);
               return;
             } else {
-                console.log("Payment Start");
-                console.log(price);
-              console.log(usage);
-              monthlyPay = usage*price;
-              console.log(monthlyPay);
-              console.log("Payment xvcv");
+                console.log("Start");
+              console.log(priceDetail);
+              console.log("12312312dgd");
+              console.log(priceDetail.dataValues);
+              console.log("12312312dgd");
+              console.log(priceDetail.dataValues.price);
+              console.log("Finish");
+            //   price=priceDetail.dataValues.price;
+              return priceDetail.dataValues.price;
+            //   res.setHeader("Content-Type", "application/json");
+            //  // res.body(employee);
+            //   res.end(JSON.stringify({ priceDetail: priceDetail}));
+            }
+          });
+    }
+    
 
-              var newPayment = {
-                paymentData: monthlyPay,
-                accountId: accId
-              };
-            
-              Payment.createPayment(newPayment, function (err, payment) {
+    function getPayment(){
+        // for ( flag = 0; flag < 5; accId++,flag++) {
+            var monthlyPay=0;
+            Usage.getSumUsageByDate(accId,date, function(err, usage){
                 if (err) {
-                  console.log("errors " + err.message);
+                  console.log("errors" + err.message);
                   callback(err);
                 //   res.sendStatus(400);
                   return;
                 } else {
-                  console.log(payment);
-                  callback(null, payment);
+                    console.log("Payment Start");
+                    console.log(price);
+                  console.log(usage);
+                  monthlyPay = usage*price;
+                  console.log(monthlyPay);
+                  console.log("Payment xvcv");
+    
+                  var newPayment = {
+                    paymentData: monthlyPay,
+                    accountId: accId
+                  };
+                
+                  Payment.createPayment(newPayment, function (err, payment) {
+                    if (err) {
+                      console.log("errors " + err.message);
+                      callback(err);
+                    //   res.sendStatus(400);
+                      return;
+                    } else {
+                      console.log(payment);
+                      callback(null, payment);
+                    //   res.setHeader("Content-Type", "application/json");
+                    //   res.end(JSON.stringify({ payment: payment}));
+                    }
+                  });
+    
+    
                 //   res.setHeader("Content-Type", "application/json");
-                //   res.end(JSON.stringify({ payment: payment}));
+                //  // res.body(employee);
+                //   res.end(JSON.stringify({ usage: usage}));
                 }
               });
-
-
-            //   res.setHeader("Content-Type", "application/json");
-            //  // res.body(employee);
-            //   res.end(JSON.stringify({ usage: usage}));
-            }
-          });
-        
-    // }
-        }).catch((err) => {
-            callback(err);
-          });
-  
-   
-  
+            
+        // }
+    }
     
+
   };
 
 
