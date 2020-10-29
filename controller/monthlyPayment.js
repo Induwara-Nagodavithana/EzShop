@@ -14,8 +14,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
     var flag=0;
     // var datetime = new Date();
     //     console.log(datetime.toISOString().slice(0,7));
-    for ( flag = 0; flag < 5; accId++,flag++) {
-        const element = array[index];
+    // for ( flag = 0; flag < 5; accId++,flag++) {
         Usage.getSumUsageByDate(accId,date, function(err, usage){
             if (err) {
               console.log("errors" + err.message);
@@ -35,7 +34,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
             }
           });
         
-    }
+    // }
   
     // Payment.create(newPayment)
     //   .then((payment) => {
