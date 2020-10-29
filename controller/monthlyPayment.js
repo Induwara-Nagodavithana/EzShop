@@ -57,7 +57,8 @@ module.exports.createMonthlyPayment = function (date, callback) {
     
                 Payment.create(newPayment)
                     .then((payment) => {
-                        callback(null, payment);
+                        console.log(payment);
+                        // callback(null, payment);
                     })
                     .catch((err) => {
                         callback(err);
@@ -66,7 +67,8 @@ module.exports.createMonthlyPayment = function (date, callback) {
                 
             });  
         }
-        
+        var myJson = {'key':'Done'};
+        callback(null, myJson);
 
     });
 
