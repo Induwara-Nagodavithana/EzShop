@@ -20,4 +20,4 @@ var PaymentDetailes = db.define(
 );
 
 
-module.exports = EType;
+module.exports = PaymentDetailes;
