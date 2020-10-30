@@ -11,6 +11,7 @@ var Request = require("../controller/request");
 var Usage = require("../controller/usage");
 var Account = require("../controller/account");
 var MonthlyPayment = require("../controller/monthlyPayment");
+var PaymentDetailes = require("../controller/paymentDetailes");
 // var Center = require("../models/centers");
 //var passport = require("passport");
 const bcrypt = require("bcryptjs");
@@ -1235,6 +1236,60 @@ router.post("/getSumUsageByDate", urlencodedParser, function (req, res) {
       res.setHeader("Content-Type", "application/json");
      // res.body(employee);
       res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
+
+router.post("/registerPaymentDetailes", urlencodedParser, function (req, res) {
+  console.log("Register PaymentDetailes Start");
+  
+  var date = req.body.date;
+  var newPaymentDetailes = {
+    Date: date
+  };
+
+  PaymentDetailes.createPaymentDetailes(newPaymentDetailes, function (err, paymentDetailes) {
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(paymentDetailes);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ paymentDetailes: paymentDetailes}));
+    }
+  });
+});
+
+router.get("/getPaymentDetailes", urlencodedParser, function (req, res) {
+  PaymentDetailes.getPaymentDetailes(function(err, paymentDetailes){
+    if (err) {
+      console.log("errors :-" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(paymentDetailes);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ paymentDetailes: paymentDetailes}));
+    }
+  });
+});
+
+
+router.post("/getOnePaymentDetailesByDate", urlencodedParser, function (req, res) {
+  var date = req.body.date;
+  PaymentDetailes.getPaymentDetailesByDate(date, function(err, paymentDetailes){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(paymentDetailes);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ paymentDetailes: paymentDetailes}));
     }
   });
 });
