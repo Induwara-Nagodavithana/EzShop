@@ -68,7 +68,7 @@ module.exports.createPayment = function (newPayment, callback) {
     });
   };
 
-  module.exports.getPaymentByAccNo = function (id, callback) {
+  module.exports.getPaymentByAccNo = function (accountNo, callback) {
     Accounts.findOne({
       where: {  accountNo: accountNo},
     }).then((accounts) => {
