@@ -10,6 +10,14 @@ module.exports.getEmployeeById = function (id, callback) {
   });
 };
 
+module.exports.getEmployeeByNic = function (nic, callback) {
+  Employee.findOne({
+    where: { nic: nic},
+  }).then((employee) => {
+    callback(null, employee);
+  });
+};
+
 module.exports.getEmployees = function (callback) {
     Employee.findAll().then((employee) => {
       callback(null, employee);

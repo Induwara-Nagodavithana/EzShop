@@ -543,6 +543,22 @@ router.post("/getOneEmployee", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/getOneEmployeeByNic", urlencodedParser, function (req, res) {
+  var nic = req.body.nic;
+  Employee.getEmployeeById(nic, function(err, employee){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(employee);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ employee: employee}));
+    }
+  });
+});
+
 router.post("/deleteEmployee", urlencodedParser, function (req, res) {
   console.log("Employee Deleting");
  var id = req.body.id;
