@@ -1,6 +1,7 @@
 var Payment = require("../models/payment");
 
 const Sequelize = require("sequelize");
+var Accounts = require("../models/accounts");
 
 module.exports.createPayment = function (newPayment, callback) {
     console.log("Create Payment");
