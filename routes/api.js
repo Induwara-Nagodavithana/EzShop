@@ -893,6 +893,22 @@ router.post("/getOnePayment", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/getOnePaymentByAccNo", urlencodedParser, function (req, res) {
+  var AccNo = req.body.AccNo;
+  Payment.getPaymentByAccNo(AccNo, function(err, payment){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(payment);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ payment: payment}));
+    }
+  });
+});
+
 router.post("/getManyPayment", urlencodedParser, function (req, res) {
   var accountId = req.body.accountId;
   Payment.getPaymentByAccountId(accountId, function(err, payment){
