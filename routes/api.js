@@ -545,7 +545,7 @@ router.post("/getOneEmployee", urlencodedParser, function (req, res) {
 
 router.post("/getOneEmployeeByNic", urlencodedParser, function (req, res) {
   var nic = req.body.nic;
-  Employee.getEmployeeById(nic, function(err, employee){
+  Employee.getEmployeeByNic(nic, function(err, employee){
     if (err) {
       console.log("errors" + err.message);
       res.sendStatus(400);
