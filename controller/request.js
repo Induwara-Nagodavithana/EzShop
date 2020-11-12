@@ -68,6 +68,24 @@ module.exports.createRequest = function (newRequest, callback) {
     });
   };
 
+  module.exports.updateRequest = function (id, newRequest, callback) {
+    console.log("Update Request");
+  
+    // newUser.password = hash;
+  
+    Request.update(newRequest, {
+      where: {
+        id: id,
+      },
+    })
+      .then((request) => {
+        callback(null, request);
+      })
+      .catch((err) => {
+        callback(err);
+      });
+  };
+
 //   module.exports.getLatestRequestByAccountId = function (accountId, callback) {
 //     const Op = Sequelize.Op;
 //     Request.max('id',{

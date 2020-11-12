@@ -1004,6 +1004,33 @@ router.post("/registerRequest", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/updateRequest", urlencodedParser, function (req, res) {
+  console.log("Update Request Start");
+  var id = req.body.id;
+  var accountId = req.body.accountId;
+  var requestData = req.body.request;
+  var Type = req.body.type;
+  var isPending = req.body.isPending;
+  var newRequest = {
+    requestData: requestData,
+    accountId: accountId,
+    Type: Type,
+    isPending:isPending
+  };
+
+  Request.updateRequest(id,newRequest, function (err, re) {
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(request);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ request: request}));
+    }
+  });
+});
+
 router.get("/getRequest", urlencodedParser, function (req, res) {
   Request.getRequest(function(err, request){
     if (err) {
