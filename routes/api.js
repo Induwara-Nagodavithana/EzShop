@@ -1018,7 +1018,7 @@ router.post("/updateRequest", urlencodedParser, function (req, res) {
     isPending:isPending
   };
 
-  Request.updateRequest(id,newRequest, function (err, re) {
+  Request.updateRequest(id,newRequest, function (err, res) {
     if (err) {
       console.log("errors" + err.message);
       res.sendStatus(400);
