@@ -133,13 +133,21 @@ module.exports.LandingDetailes = function (callback) {
                     });
                 }
                 console.log("Payment List Checking Start");
-            list.forEach(element => {
+            // list.forEach(element => {
+            //     console.log("element List Checking");
+            //     console.log(element);
+            //     if (element >= 0) {
+            //         flag++;
+            //     }
+            // });
+            for (let index = 0; index < list.length; index++) {
+                const element = list[index];
                 console.log("element List Checking");
                 console.log(element);
                 if (element >= 0) {
                     flag++;
                 }
-            });
+            }
             console.log("Payment List Checking End");
             });
             
