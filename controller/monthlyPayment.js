@@ -96,9 +96,10 @@ module.exports.LandingDetailes = function (callback) {
     // var datetime = new Date();
     //     console.log(datetime.toISOString().slice(0,7));
 
-    var id = 1;
-    var price;
+    
     const { Op } = require("sequelize");
+    var list = [];
+    var flag=0;
 
     Accounts.count({
         where: { isConnected: 1 },
@@ -118,12 +119,11 @@ module.exports.LandingDetailes = function (callback) {
                 console.log(accounts[0]);
                 console.log("fdsfdfg");
                 console.log(accounts[0].id);
-                var list = [];
-                var flag=0;
+                
                 for (let i = 0; i < accounts.length; i++) {
                     Payment.sum('paymentData', {
                         where: {
-                            accountId: accounts[i],
+                            accountId: accounts[i].id,
                         }
 
                     }).then((payment) => {
