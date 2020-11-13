@@ -129,7 +129,7 @@ module.exports.LandingDetailes = function (callback) {
                     }).then((payment) => {
                         console.log("Payment List");
                         console.log(payment);
-                        list.push(payment);
+                        list[i]=payment;
                     });
                 }
                 console.log("Payment List Checking Start");
