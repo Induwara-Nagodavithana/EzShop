@@ -101,6 +101,7 @@ module.exports.LandingDetailes = function (callback) {
     var list = [];
     var flag = 0;
     var Counts;
+    var AllCounts;
 
     Accounts.count({
         where: { isConnected: 1 },
@@ -135,25 +136,20 @@ module.exports.LandingDetailes = function (callback) {
                         }
                         console.log("flag");
                         console.log(flag);
+                        
 
                     });
+                    
                 }
                 console.log("Payment List Checking Start");
-                // list.forEach(element => {
-                //     console.log("element List Checking");
-                //     console.log(element);
-                //     if (element >= 0) {
-                //         flag++;
-                //     }
-                // });
-                // for (let index = 0; index < list.length; index++) {
-                //     var element = list[index];
-                //     console.log("element List Checking");
-                //     console.log(element);
-                //     if (element >= 0) {
-                //         flag++;
-                //     }
-                // }
+                Accounts.findOne({
+                    where: {  accountNo: 1},
+                  }).then((accounts) => {
+                    var myJson = {
+                        'countAccBalance': flag,
+                    };
+                    callback(null, myJson);
+                  });
                 console.log("Payment List Checking End");
             });
 
@@ -202,7 +198,7 @@ module.exports.LandingDetailes = function (callback) {
                 console.log("countAccBalanceAll is = ");
                 console.log(countAccBalanceAll);
 
-                var AllCounts = {
+                AllCounts = {
                     'countAccAll': countAccAll,
                     'countReqAll': countReqAll,
                     'countAccBalanceAll': countAccBalanceAll,
