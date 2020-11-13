@@ -97,23 +97,71 @@ module.exports.LandingDetailes = function ( callback) {
 
     var id = 1;
     var price;
-
+    const { Op } = require("sequelize");
+    
     Accounts.count({
         where: { isConnected: 1 },
         distinct: true,
-        // col: 'jfbwqcra4wtt0q2k.isConnected'
-      }).then((count) => {
-        // callback(null, accounts);
+      }).then((countAcc) => {
         console.log("count is = ");
-        console.log(count);
-    //     Requests.count({
-    //     where: { isConnected: 1 },
-    //     distinct: true,
-    //     col: 'Product.isConnected'
-    //   }).then((request) => {
-    //         callback(null, request);
-    //       });
+        console.log(countAcc);
+        Requests.count({
+        where: { isPending: 1 },
+        distinct: true,
+      }).then((countReq) => {
+        Accounts.count({
+            where: {  
+                accountNo: {
+                    [Op.gte]: 0,
+                }
+            },
+            distinct: true,
+          }).then((countAccBalance) => {
+            var myJson = {
+                'countAcc':countAcc,
+                'countReq':countReq,
+                'countAccBalance':countAccBalance,
+
+        };
+        callback(null, myJson);
+          });
       });
+    });
+
+    Accounts.count({
+        // where: { isConnected: 1 },
+        distinct: true,
+      }).then((countAccAll) => {
+        
+        Requests.count({
+        where: { isPending: 1 },
+        distinct: true,
+      }).then((countReqAll) => {
+        Accounts.count({
+            where: {  
+                accountNo: {
+                    [Op.gte]: 0,
+                }
+            },
+            distinct: true,
+          }).then((countAccBalanceAll) => {
+        //     var myJson = {
+        //         'countAcc':countAccAll,
+        //         'countReq':countReqAll,
+        //         'countAccBalance':countAccBalanceAll,
+
+        // };
+        // callback(null, myJson);
+        console.log("countAccAll is = ");
+        console.log(countAccAll);
+        console.log("countReqAll is = ");
+        console.log(countReqAll);
+        console.log("countAccBalanceAll is = ");
+        console.log(countAccBalanceAll);
+        
+          });
+      });
+    });
 
     // PriceDetail.findOne({
     //     where: { isPending: 1 },
