@@ -3,6 +3,8 @@ const Sequelize = require("sequelize");
 // var Usage = require("../controller/usage");
 // var PriceDetail = require("../controller/priceDetail");
 
+var List = require("collections/list");
+
 var Payment = require("../models/payment");
 var Usage = require("../models/usage");
 var PriceDetail = require("../models/priceDetail");
@@ -31,15 +33,15 @@ module.exports.createMonthlyPayment = function (date, callback) {
         price = priceDetail.dataValues.price;
         console.log(date);
         const Op = Sequelize.Op;
-        
+
         Accounts.findAll().then((accounts) => {
 
-        //   callback(null, accounts);
-        // for (let flag = 0; flag < 10; accId++) {
+            //   callback(null, accounts);
+            // for (let flag = 0; flag < 10; accId++) {
             console.log("Accounts Finding Start");
-                    console.log(accounts[0]);
-                    console.log("fdsfdfg");
-                    console.log(accounts[0].id);
+            console.log(accounts[0]);
+            console.log("fdsfdfg");
+            console.log(accounts[0].id);
             for (let i = 0; i < accounts.length; i++) {
                 Usage.sum('usageData', {
                     where: {
@@ -56,15 +58,15 @@ module.exports.createMonthlyPayment = function (date, callback) {
                     console.log(price);
                     console.log(usage);
                     var monthlyPay = usage * price;
-                    monthlyPay=monthlyPay.toFixed(2)
+                    monthlyPay = monthlyPay.toFixed(2)
                     console.log(monthlyPay);
                     console.log("Payment xvcv");
-        
+
                     var newPayment = {
                         paymentData: -monthlyPay,
                         accountId: accounts[i].id
                     };
-        
+
                     Payment.create(newPayment)
                         .then((payment) => {
                             console.log(payment);
@@ -74,12 +76,12 @@ module.exports.createMonthlyPayment = function (date, callback) {
                             callback(err);
                         });
                     // }
-                    
-                });  
+
+                });
             }
         });
-        
-        var myJson = {'key':'Done'};
+
+        var myJson = { 'key': 'Done' };
         callback(null, myJson);
 
     });
@@ -87,7 +89,7 @@ module.exports.createMonthlyPayment = function (date, callback) {
 }
 
 
-module.exports.LandingDetailes = function ( callback) {
+module.exports.LandingDetailes = function (callback) {
     console.log("Create Detailes");
 
     // var accId = 1;
@@ -98,131 +100,153 @@ module.exports.LandingDetailes = function ( callback) {
     var id = 1;
     var price;
     const { Op } = require("sequelize");
-    
+
     Accounts.count({
         where: { isConnected: 1 },
         distinct: true,
-      }).then((countAcc) => {
+    }).then((countAcc) => {
         console.log("count is = ");
         console.log(countAcc);
         Requests.count({
-        where: { isPending: 1 },
-        distinct: true,
-      }).then((countReq) => {
-        Accounts.count({
-            where: {  
-                accountNo: {
-                    [Op.gte]: 0,
-                }
-            },
+            where: { isPending: 1 },
             distinct: true,
-          }).then((countAccBalance) => {
-            var myJson = {
-                'countAcc':countAcc,
-                'countReq':countReq,
-                'countAccBalance':countAccBalance,
+        }).then((countReq) => {
+            Accounts.findAll().then((accounts) => {
 
-        };
-        callback(null, myJson);
-          });
-      });
-    });
+                //   callback(null, accounts);
+                // for (let flag = 0; flag < 10; accId++) {
+                console.log("Accounts Finding Start");
+                console.log(accounts[0]);
+                console.log("fdsfdfg");
+                console.log(accounts[0].id);
+                var list = new List();
+                var flag=0;
+                for (let i = 0; i < accounts.length; i++) {
+                    Payment.sum('paymentData', {
+                        where: {
+                            accountId: accounts[i],
+                        }
 
-    Accounts.count({
-        // where: { isConnected: 1 },
-        distinct: true,
-      }).then((countAccAll) => {
-        
-        Requests.count({
-        where: { isPending: 1 },
-        distinct: true,
-      }).then((countReqAll) => {
-        Accounts.count({
-            where: {  
-                accountNo: {
-                    [Op.gte]: 0,
+                    }).then((payment) => {
+                        console.log("Payment List");
+                console.log(payment);
+                        list.push(payment);
+                    });
                 }
-            },
+            });
+
+                        list.forEach(element => {
+                            if (element>=0) {
+                                flag++;
+                            }
+                        });
+            // 
+                        var myJson = {
+                            'countAcc': countAcc,
+                            'countReq': countReq,
+                            'countAccBalance': flag,
+
+                        };
+                        callback(null, myJson);
+                    });
+                });
+        // });
+
+        Accounts.count({
+            // where: { isConnected: 1 },
             distinct: true,
-          }).then((countAccBalanceAll) => {
-        //     var myJson = {
-        //         'countAcc':countAccAll,
-        //         'countReq':countReqAll,
-        //         'countAccBalance':countAccBalanceAll,
+        }).then((countAccAll) => {
 
-        // };
-        // callback(null, myJson);
-        console.log("countAccAll is = ");
-        console.log(countAccAll);
-        console.log("countReqAll is = ");
-        console.log(countReqAll);
-        console.log("countAccBalanceAll is = ");
-        console.log(countAccBalanceAll);
-        
-          });
-      });
-    });
+            Requests.count({
+                // where: { isPending: 1 },
+                distinct: true,
+            }).then((countReqAll) => {
+                Accounts.count({
+                    // where: {  
+                    //     accountNo: {
+                    //         [Op.gte]: 0,
+                    //     }
+                    // },
+                    distinct: true,
+                }).then((countAccBalanceAll) => {
+                    //     var myJson = {
+                    //         'countAcc':countAccAll,
+                    //         'countReq':countReqAll,
+                    //         'countAccBalance':countAccBalanceAll,
 
-    // PriceDetail.findOne({
-    //     where: { isPending: 1 },
-    // }).then((priceDetail) => {
-    //     // callback(null, priceDetail);
-    //     price = priceDetail.dataValues.price;
-    //     console.log(date);
-    //     const Op = Sequelize.Op;
-        
-    //     Accounts.findAll().then((accounts) => {
+                    // };
+                    // callback(null, myJson);
+                    console.log("countAccAll is = ");
+                    console.log(countAccAll);
+                    console.log("countReqAll is = ");
+                    console.log(countReqAll);
+                    console.log("countAccBalanceAll is = ");
+                    console.log(countAccBalanceAll);
 
-    //     //   callback(null, accounts);
-    //     // for (let flag = 0; flag < 10; accId++) {
-    //         console.log("Accounts Finding Start");
-    //                 console.log(accounts[0]);
-    //                 console.log("fdsfdfg");
-    //                 console.log(accounts[0].id);
-    //         for (let i = 0; i < accounts.length; i++) {
-    //             Usage.sum('usageData', {
-    //                 where: {
-    //                     accountId: accounts[i].id,
-    //                     UpdatedAt: { [Op.startsWith]: date },
-    //                 },
-    //             }).then((usage) => {
-    //                 // if (usage==0) {
-    //                 //     flag++;
-    //                 // }else{
-    //                 //     //   callback(null, usage);
-    //                 //     flag=0;
-    //                 console.log("Payment Start");
-    //                 console.log(price);
-    //                 console.log(usage);
-    //                 var monthlyPay = usage * price;
-    //                 monthlyPay=monthlyPay.toFixed(2)
-    //                 console.log(monthlyPay);
-    //                 console.log("Payment xvcv");
-        
-    //                 var newPayment = {
-    //                     paymentData: -monthlyPay,
-    //                     accountId: accounts[i].id
-    //                 };
-        
-    //                 Payment.create(newPayment)
-    //                     .then((payment) => {
-    //                         console.log(payment);
-    //                         // callback(null, payment);
-    //                     })
-    //                     .catch((err) => {
-    //                         callback(err);
-    //                     });
-    //                 // }
-                    
-    //             });  
-    //         }
-    //     });
-        
-    //     var myJson = {'key':'Done'};
-    //     callback(null, myJson);
-
+                });
+            });
+        });
     // });
+        // PriceDetail.findOne({
+        //     where: { isPending: 1 },
+        // }).then((priceDetail) => {
+        //     // callback(null, priceDetail);
+        //     price = priceDetail.dataValues.price;
+        //     console.log(date);
+        //     const Op = Sequelize.Op;
 
-}
+        //     Accounts.findAll().then((accounts) => {
+
+        //     //   callback(null, accounts);
+        //     // for (let flag = 0; flag < 10; accId++) {
+        //         console.log("Accounts Finding Start");
+        //                 console.log(accounts[0]);
+        //                 console.log("fdsfdfg");
+        //                 console.log(accounts[0].id);
+        //         for (let i = 0; i < accounts.length; i++) {
+        //             Usage.sum('usageData', {
+        //                 where: {
+        //                     accountId: accounts[i].id,
+        //                     UpdatedAt: { [Op.startsWith]: date },
+        //                 },
+        //             }).then((usage) => {
+        //                 // if (usage==0) {
+        //                 //     flag++;
+        //                 // }else{
+        //                 //     //   callback(null, usage);
+        //                 //     flag=0;
+        //                 console.log("Payment Start");
+        //                 console.log(price);
+        //                 console.log(usage);
+        //                 var monthlyPay = usage * price;
+        //                 monthlyPay=monthlyPay.toFixed(2)
+        //                 console.log(monthlyPay);
+        //                 console.log("Payment xvcv");
+
+        //                 var newPayment = {
+        //                     paymentData: -monthlyPay,
+        //                     accountId: accounts[i].id
+        //                 };
+
+        //                 Payment.create(newPayment)
+        //                     .then((payment) => {
+        //                         console.log(payment);
+        //                         // callback(null, payment);
+        //                     })
+        //                     .catch((err) => {
+        //                         callback(err);
+        //                     });
+        //                 // }
+
+        //             });  
+        //         }
+        //     });
+
+        //     var myJson = {'key':'Done'};
+        //     callback(null, myJson);
+
+        // });
+
+    }
 
 
