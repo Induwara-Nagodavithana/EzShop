@@ -1352,7 +1352,6 @@ router.post("/Verify", urlencodedParser, function (req, res) {
       res.end(JSON.stringify({msg: "User Not Authenticated",token: "", isMatched: "False"}));
       return;
     }else if (user==null) {
-      console.log("errors" + err.message);
       res.setHeader("Content-Type", "application/json");
      // res.body(employee);
       res.end(JSON.stringify({msg: "Employee Not Authenticated",token: "", isMatched: "False"}));
@@ -1390,7 +1389,6 @@ router.post("/VerifyEmployee", urlencodedParser, function (req, res) {
       res.end(JSON.stringify({msg: "Employee Not Authenticated",token: "", isMatched: "False"}));
       return;
     }else if (employee==null) {
-      console.log("errors" + err.message);
       res.setHeader("Content-Type", "application/json");
      // res.body(employee);
       res.end(JSON.stringify({msg: "Employee Not Authenticated",token: "", isMatched: "False"}));
