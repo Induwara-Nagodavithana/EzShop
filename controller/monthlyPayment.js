@@ -107,15 +107,48 @@ module.exports.LandingDetailes = function (callback) {
         var ans = pad.substring(0, pad.length - str.length) + str
         Usage.sum('usageData', {
             where: {
-                UpdatedAt: { [Op.startsWith]: "2020-"+ans },
+                UpdatedAt: { [Op.startsWith]: "2020-" + ans },
             }
-            }).then((usage) => {
-                usageList[index-1] = usage
-            });
-            }
-        
+        }).then((usage) => {
+            usageList[index - 1] = usage
+        });
+    }
 
-    
+    Accounts.count({
+        distinct: true,
+    }).then((countAccAll) => {
+
+        Requests.count({
+            distinct: true,
+        }).then((countReqAll) => {
+            Accounts.count({
+                distinct: true,
+            }).then((countAccBalanceAll) => {
+                console.log("countAccAll is = ");
+                console.log(countAccAll);
+                console.log("countReqAll is = ");
+                console.log(countReqAll);
+                console.log("countAccBalanceAll is = ");
+                console.log(countAccBalanceAll);
+
+                AllCounts = {
+                    'countAccAll': countAccAll,
+                    'countReqAll': countReqAll,
+                    'countAccBalanceAll': countAccBalanceAll,
+                };
+
+                var myJson2 = {
+                    AllCounts,
+                    Counts
+                };
+                // callback(null, myJson2);
+
+            });
+        });
+    });
+
+
+
 
 
 
@@ -200,38 +233,7 @@ module.exports.LandingDetailes = function (callback) {
     });
     // });
 
-    Accounts.count({
-        distinct: true,
-    }).then((countAccAll) => {
 
-        Requests.count({
-            distinct: true,
-        }).then((countReqAll) => {
-            Accounts.count({
-                distinct: true,
-            }).then((countAccBalanceAll) => {
-                console.log("countAccAll is = ");
-                console.log(countAccAll);
-                console.log("countReqAll is = ");
-                console.log(countReqAll);
-                console.log("countAccBalanceAll is = ");
-                console.log(countAccBalanceAll);
-
-                AllCounts = {
-                    'countAccAll': countAccAll,
-                    'countReqAll': countReqAll,
-                    'countAccBalanceAll': countAccBalanceAll,
-                };
-
-                var myJson2 = {
-                    AllCounts,
-                    Counts
-                };
-                // callback(null, myJson2);
-
-            });
-        });
-    });
 
 }
 
