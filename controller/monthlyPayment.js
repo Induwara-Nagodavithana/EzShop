@@ -100,6 +100,7 @@ module.exports.LandingDetailes = function (callback) {
     const { Op } = require("sequelize");
     var list = [];
     var flag = 0;
+    var AllCount;
 
     Accounts.count({
         where: { isConnected: 1 },
@@ -124,42 +125,45 @@ module.exports.LandingDetailes = function (callback) {
                     Payment.sum('paymentData', {
                         where: {
                             accountId: accounts[i].id,
-                        }}).then((payment) => {
+                        }
+                    }).then((payment) => {
                         console.log("Payment List");
                         console.log(payment);
-                        list[i]=payment;
+                        list[i] = payment;
+                        if (payment >= 0) {
+                            flag++;
+                        }
                     });
                 }
                 console.log("Payment List Checking Start");
-            // list.forEach(element => {
-            //     console.log("element List Checking");
-            //     console.log(element);
-            //     if (element >= 0) {
-            //         flag++;
-            //     }
-            // });
-            for (let index = 0; index < list.length; index++) {
-                var element = list[index];
-                console.log("element List Checking");
-                console.log(element);
-                if (element >= 0) {
-                    flag++;
-                }
-            }
-            console.log("Payment List Checking End");
+                // list.forEach(element => {
+                //     console.log("element List Checking");
+                //     console.log(element);
+                //     if (element >= 0) {
+                //         flag++;
+                //     }
+                // });
+                // for (let index = 0; index < list.length; index++) {
+                //     var element = list[index];
+                //     console.log("element List Checking");
+                //     console.log(element);
+                //     if (element >= 0) {
+                //         flag++;
+                //     }
+                // }
+                console.log("Payment List Checking End");
             });
-            
+
             // 
-            console.log("list1");
-            console.log(list[1]);
-            var myJson = {
+            // console.log("list1");
+            // console.log(list[1]);
+            AllCount = {
                 'countAcc': countAcc,
                 'countReq': countReq,
                 'countAccBalance': flag,
-                'one': list[1],
 
             };
-            callback(null, myJson);
+            // callback(null, myJson);
         });
     });
     // });
@@ -194,6 +198,18 @@ module.exports.LandingDetailes = function (callback) {
                 console.log(countReqAll);
                 console.log("countAccBalanceAll is = ");
                 console.log(countAccBalanceAll);
+
+                var Counts = {
+                    'countAccAll': countAccAll,
+                    'countReqAll': countReqAll,
+                    'countAccBalanceAll': countAccBalanceAll,
+                };
+
+                var myJson2 = {
+                    AllCount,
+                    Counts
+                };
+                callback(null, myJson2);
 
             });
         });
