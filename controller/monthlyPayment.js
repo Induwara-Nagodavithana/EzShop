@@ -124,9 +124,7 @@ module.exports.LandingDetailes = function (callback) {
                     Payment.sum('paymentData', {
                         where: {
                             accountId: accounts[i].id,
-                        }
-
-                    }).then((payment) => {
+                        }}).then((payment) => {
                         console.log("Payment List");
                         console.log(payment);
                         list[i]=payment;
@@ -141,7 +139,7 @@ module.exports.LandingDetailes = function (callback) {
             //     }
             // });
             for (let index = 0; index < list.length; index++) {
-                const element = list[index];
+                var element = list[index];
                 console.log("element List Checking");
                 console.log(element);
                 if (element >= 0) {
@@ -156,6 +154,7 @@ module.exports.LandingDetailes = function (callback) {
                 'countAcc': countAcc,
                 'countReq': countReq,
                 'countAccBalance': flag,
+                'one': list[1],
 
             };
             callback(null, myJson);
