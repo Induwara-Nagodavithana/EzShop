@@ -101,9 +101,10 @@ module.exports.LandingDetailes = function ( callback) {
     Accounts.count({
         where: { isConnected: 1 },
         distinct: true,
-        col: 'Product.isConnected'
+        col: 'jfbwqcra4wtt0q2k.isConnected'
       }).then((count) => {
         // callback(null, accounts);
+        console.log("count is = ");
         console.log(count);
     //     Requests.count({
     //     where: { isConnected: 1 },
