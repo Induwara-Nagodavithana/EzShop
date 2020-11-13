@@ -3,7 +3,6 @@ const Sequelize = require("sequelize");
 // var Usage = require("../controller/usage");
 // var PriceDetail = require("../controller/priceDetail");
 
-var List = require("collections/list");
 
 var Payment = require("../models/payment");
 var Usage = require("../models/usage");
@@ -119,7 +118,7 @@ module.exports.LandingDetailes = function (callback) {
                 console.log(accounts[0]);
                 console.log("fdsfdfg");
                 console.log(accounts[0].id);
-                var list = new List();
+                var list = [];
                 var flag=0;
                 for (let i = 0; i < accounts.length; i++) {
                     Payment.sum('paymentData', {
