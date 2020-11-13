@@ -81,3 +81,11 @@ module.exports.deleteEmployee = function (id, callback) {
       callback(err);
     });
 };
+
+module.exports.comparePassword = function (candidatePassword, hash, callback) {
+  bcrypt.compare(candidatePassword, hash, function (err, res) {
+    if (err) throw err;
+    //console.log(err+" "+candidatePassword+" "+res+" "+hash)
+    callback(null, res);
+  });
+};

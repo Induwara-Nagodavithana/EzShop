@@ -942,23 +942,6 @@ router.post("/getManyPaymentByDate", urlencodedParser, function (req, res) {
   });
 });
 
-// router.post("/getSumPaymentByDate", urlencodedParser, function (req, res) {
-//   var accountId = req.body.accountId;
-//   var date = req.body.date;
-//   Payment.getSumPaymentByDate(accountId,date, function(err, payment){
-//     if (err) {
-//       console.log("errors" + err.message);
-//       res.sendStatus(400);
-//       return;
-//     } else {
-//       console.log(payment);
-//       res.setHeader("Content-Type", "application/json");
-//      // res.body(employee);
-//       res.end(JSON.stringify({ payment: payment}));
-//     }
-//   });
-// });
-
 router.post("/getSumPayment", urlencodedParser, function (req, res) {
   var accountId = req.body.accountId;
   Payment.getSumPayment(accountId, function(err, payment){
@@ -1386,6 +1369,36 @@ router.post("/Verify", urlencodedParser, function (req, res) {
 });
 });
 
+router.post("/VerifyEmployee", urlencodedParser, function (req, res) {
+  var nic = req.body.nic;
+  var password = req.body.password;
+  Employee.getEmployeeByNic(nic, function(err, employee){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      Employee.comparePassword(password, employee.password, function(err, isMatch) {
+        if (err) throw err;
+        if (isMatch) {
+          console.log("Password Matched");
+          res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({msg: "Employee Authenticated",token: "Aa123456789", isMatched: "True", employee: employee}));
+          //return done(null, user);
+        } else {
+          console.log("Invalid password");
+          //return done(null, false, { message: "Invalid password" });
+          res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({msg: "Employee Not Authenticated",token: "", isMatched: "False"}));
+        }
+      });
+}
+});
+});
+
+
 router.post("/VerifyToken", urlencodedParser, function (req, res) {
   var Token = req.body.Token;
     if (Token=="Aa123456789") {
@@ -1417,4 +1430,21 @@ router.post("/MonthlyPayment", urlencodedParser, function (req, res) {
     }
   });
 });
+
+
+router.post("/LandingDetailes", urlencodedParser, function (req, res) {
+  MonthlyPayment.LandingDetailes(function(err, usage){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(usage);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ usage: usage}));
+    }
+  });
+});
+
 module.exports = router;
