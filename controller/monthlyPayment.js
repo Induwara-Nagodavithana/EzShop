@@ -100,7 +100,7 @@ module.exports.LandingDetailes = function (callback) {
     const { Op } = require("sequelize");
     var list = [];
     var flag = 0;
-    var AllCount;
+    var Counts;
 
     Accounts.count({
         where: { isConnected: 1 },
@@ -133,6 +133,9 @@ module.exports.LandingDetailes = function (callback) {
                         if (payment >= 0) {
                             flag++;
                         }
+                        console.log("flag");
+                        console.log(flag);
+
                     });
                 }
                 console.log("Payment List Checking Start");
@@ -157,7 +160,7 @@ module.exports.LandingDetailes = function (callback) {
             // 
             // console.log("list1");
             // console.log(list[1]);
-            AllCount = {
+            Counts = {
                 'countAcc': countAcc,
                 'countReq': countReq,
                 'countAccBalance': flag,
@@ -199,14 +202,14 @@ module.exports.LandingDetailes = function (callback) {
                 console.log("countAccBalanceAll is = ");
                 console.log(countAccBalanceAll);
 
-                var Counts = {
+                var AllCounts = {
                     'countAccAll': countAccAll,
                     'countReqAll': countReqAll,
                     'countAccBalanceAll': countAccBalanceAll,
                 };
 
                 var myJson2 = {
-                    AllCount,
+                    AllCounts,
                     Counts
                 };
                 callback(null, myJson2);
