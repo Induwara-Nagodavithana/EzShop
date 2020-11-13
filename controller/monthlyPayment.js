@@ -150,6 +150,8 @@ module.exports.LandingDetailes = function (callback) {
             });
             
             // 
+            console.log("list1");
+            console.log(list[1]);
             var myJson = {
                 'countAcc': countAcc,
                 'countReq': countReq,
