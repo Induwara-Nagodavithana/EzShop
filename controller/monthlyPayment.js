@@ -135,6 +135,8 @@ module.exports.LandingDetailes = function (callback) {
             });
 
                         list.forEach(element => {
+                            console.log("Payment List Checking");
+                console.log(element);
                             if (element>=0) {
                                 flag++;
                             }
