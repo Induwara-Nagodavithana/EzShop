@@ -1351,13 +1351,13 @@ router.post("/Verify", urlencodedParser, function (req, res) {
      // res.body(employee);
       res.end(JSON.stringify({msg: "User Not Authenticated",token: "", isMatched: "False"}));
       return;
-    }else if (user.password==null) {
+    }else if (user==null) {
       console.log("errors" + err.message);
       res.setHeader("Content-Type", "application/json");
      // res.body(employee);
       res.end(JSON.stringify({msg: "Employee Not Authenticated",token: "", isMatched: "False"}));
       return;
-      
+
     } else {
       User.comparePassword(password, user.password, function(err, isMatch) {
         if (err) throw err;
@@ -1389,7 +1389,7 @@ router.post("/VerifyEmployee", urlencodedParser, function (req, res) {
      // res.body(employee);
       res.end(JSON.stringify({msg: "Employee Not Authenticated",token: "", isMatched: "False"}));
       return;
-    }else if (employee.password==null) {
+    }else if (employee==null) {
       console.log("errors" + err.message);
       res.setHeader("Content-Type", "application/json");
      // res.body(employee);
