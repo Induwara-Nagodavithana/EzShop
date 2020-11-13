@@ -754,7 +754,7 @@ router.post("/updatePriceDetail", urlencodedParser, function (req, res) {
     price: price
   };
 
-  PriceDetail.createPriceDetail(newPriceDetail, function (err, priceDetail) {
+  PriceDetail.updatePriceDetail(newPriceDetail, function (err, priceDetail) {
     if (err) {
       console.log("errors" + err.message);
       res.sendStatus(400);
