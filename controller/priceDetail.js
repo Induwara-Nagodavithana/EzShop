@@ -12,6 +12,24 @@ module.exports.createPriceDetail = function (newPriceDetail, callback) {
       });
   };
   
+  module.exports.updatePriceDetail = function (newPriceDetail, callback) {
+    console.log("Update PriceDetail");
+  
+    // newUser.password = hash;
+  
+    PriceDetail.update(newPriceDetail, {
+      where: {
+        id: 1,
+      },
+    })
+      .then((priceDetail) => {
+        callback(null, priceDetail);
+      })
+      .catch((err) => {
+        callback(err);
+      });
+  };
+
   module.exports.getPriceDetails = function (callback) {
     PriceDetail.findAll().then((priceDetail) => {
       callback(null, priceDetail);

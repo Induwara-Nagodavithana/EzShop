@@ -746,6 +746,27 @@ router.post("/registerPriceDetail", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/updatePriceDetail", urlencodedParser, function (req, res) {
+  console.log("Update Price Detail Start");
+  
+  var price = req.body.price;
+  var newPriceDetail = {
+    price: price
+  };
+
+  PriceDetail.createPriceDetail(newPriceDetail, function (err, priceDetail) {
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(priceDetail);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ priceDetail: priceDetail}));
+    }
+  });
+});
+
 router.get("/getPriceDetail", urlencodedParser, function (req, res) {
   PriceDetail.getPriceDetails(function(err, priceDetail){
     if (err) {
