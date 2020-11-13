@@ -132,8 +132,7 @@ module.exports.LandingDetailes = function (callback) {
                         list.push(payment);
                     });
                 }
-            });
-            console.log("Payment List Checking Start");
+                console.log("Payment List Checking Start");
             list.forEach(element => {
                 console.log("element List Checking");
                 console.log(element);
@@ -142,6 +141,8 @@ module.exports.LandingDetailes = function (callback) {
                 }
             });
             console.log("Payment List Checking End");
+            });
+            
             // 
             var myJson = {
                 'countAcc': countAcc,
