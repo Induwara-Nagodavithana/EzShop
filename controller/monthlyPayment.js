@@ -145,10 +145,17 @@ module.exports.LandingDetailes = function (callback) {
                 Accounts.findOne({
                     where: {  accountNo: 1},
                   }).then((accounts) => {
-                    var myJson = {
+                    Counts = {
+                        'countAcc': countAcc,
+                        'countReq': countReq,
                         'countAccBalance': flag,
+        
                     };
-                    callback(null, myJson);
+                    var myJson2 = {
+                        AllCounts,
+                        Counts
+                    };
+                    callback(null, myJson2);
                   });
                 console.log("Payment List Checking End");
             });
@@ -208,7 +215,7 @@ module.exports.LandingDetailes = function (callback) {
                     AllCounts,
                     Counts
                 };
-                callback(null, myJson2);
+                // callback(null, myJson2);
 
             });
         });
