@@ -222,12 +222,12 @@ module.exports.LandingDetailes = function (callback) {
                 console.log("Payment List Checking End");
             });
 
-            Counts = {
-                'countAcc': countAcc,
-                'countReq': countReq,
-                'countAccBalance': flag,
+            // Counts = {
+            //     'countAcc': countAcc,
+            //     'countReq': countReq,
+            //     'countAccBalance': flag,
 
-            };
+            // };
             // callback(null, myJson);
         });
     });
