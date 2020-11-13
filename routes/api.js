@@ -1346,7 +1346,10 @@ router.post("/Verify", urlencodedParser, function (req, res) {
   User.getUserByNic(nic, function(err, user){
     if (err) {
       console.log("errors" + err.message);
-      res.sendStatus(400);
+      // res.sendStatus(400);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({msg: "User Not Authenticated",token: "", isMatched: "False"}));
       return;
     } else {
       User.comparePassword(password, user.password, function(err, isMatch) {
@@ -1375,7 +1378,9 @@ router.post("/VerifyEmployee", urlencodedParser, function (req, res) {
   Employee.getEmployeeByNic(nic, function(err, employee){
     if (err) {
       console.log("errors" + err.message);
-      res.sendStatus(400);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({msg: "Employee Not Authenticated",token: "", isMatched: "False"}));
       return;
     } else {
       Employee.comparePassword(password, employee.password, function(err, isMatch) {
