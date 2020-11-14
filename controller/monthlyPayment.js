@@ -9,6 +9,7 @@ var Usage = require("../models/usage");
 var PriceDetail = require("../models/priceDetail");
 var Accounts = require("../models/accounts");
 var Requests = require("../models/requests");
+const User = require("../models/user");
 
 
 
@@ -121,28 +122,33 @@ module.exports.LandingDetailes = function (callback) {
         Requests.count({
             distinct: true,
         }).then((countReqAll) => {
-            Accounts.count({
+            User.count({
                 distinct: true,
-            }).then((countAccBalanceAll) => {
-                console.log("countAccAll is = ");
-                console.log(countAccAll);
-                console.log("countReqAll is = ");
-                console.log(countReqAll);
-                console.log("countAccBalanceAll is = ");
-                console.log(countAccBalanceAll);
+            }).then((countUserAll) => {
+                Accounts.count({
+                    distinct: true,
+                }).then((countAccBalanceAll) => {
+                    console.log("countAccAll is = ");
+                    console.log(countAccAll);
+                    console.log("countReqAll is = ");
+                    console.log(countReqAll);
+                    console.log("countAccBalanceAll is = ");
+                    console.log(countAccBalanceAll);
 
-                AllCounts = {
-                    'countAccAll': countAccAll,
-                    'countReqAll': countReqAll,
-                    'countAccBalanceAll': countAccBalanceAll,
-                };
+                    AllCounts = {
+                        'countAccAll': countAccAll,
+                        'countReqAll': countReqAll,
+                        'countAccBalanceAll': countAccBalanceAll,
+                        'countUserAll': countUserAll,
+                    };
 
-                var myJson2 = {
-                    AllCounts,
-                    Counts
-                };
-                // callback(null, myJson2);
+                    var myJson2 = {
+                        AllCounts,
+                        Counts
+                    };
+                    // callback(null, myJson2);
 
+                });
             });
         });
     });
