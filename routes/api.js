@@ -321,6 +321,22 @@ router.post("/getOneAccount", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/getIsConnectedByAccountId", urlencodedParser, function (req, res) {
+  var AccId = req.body.AccId;
+  Account.getAccountsIsConnectedById(AccId, function(err, account){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(account);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ account: account}));
+    }
+  });
+});
+
 router.post("/getOneAccountByUserId", urlencodedParser, function (req, res) {
   var userid = req.body.userid;
   Account.getOneAccountByUserId(userid, function(err, account){
