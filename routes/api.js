@@ -12,6 +12,7 @@ var Usage = require("../controller/usage");
 var Account = require("../controller/account");
 var MonthlyPayment = require("../controller/monthlyPayment");
 var PaymentDetailes = require("../controller/paymentDetailes");
+var Error = require("../controller/error");
 // var Center = require("../models/centers");
 //var passport = require("passport");
 const bcrypt = require("bcryptjs");
@@ -978,6 +979,158 @@ router.post("/getSumPayment", urlencodedParser, function (req, res) {
     }
   });
 });
+
+
+
+
+router.post("/registerError", urlencodedParser, function (req, res) {
+  console.log("Register Error Start");
+  
+  var accountId = req.body.accountId;
+  var error1 = req.body.error;
+  var type = req.body.type;
+  var newError = {
+    accountId: accountId,
+    error1: error1,
+    type: type
+  };
+
+  Error.createError(newError, function (err, error2) {
+    if (err) {
+      console.log("errors " + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
+router.post("/updateError", urlencodedParser, function (req, res) {
+  console.log("Update Error Start");
+  var id = req.body.id;
+  var accountId = req.body.accountId;
+  var error1 = req.body.error;
+  var type = req.body.type;
+  var newError = {
+    accountId: accountId,
+    error1: error1,
+    type: type
+  };
+
+  Error.updateError(id,newError, function (err, error2) {
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
+router.get("/getErrors", urlencodedParser, function (req, res) {
+  Error.getError(function(err, error2){
+    if (err) {
+      console.log("errors :-" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
+router.post("/deleteError", urlencodedParser, function (req, res) {
+  console.log("Error Deleting");
+  
+  var id = req.body.id;
+  
+  Error.deleteError(id, function (err, error2) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
+router.post("/getOneError", urlencodedParser, function (req, res) {
+  var id = req.body.id;
+  Error.getErrorById(id, function(err, error2){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
+router.post("/getOneErrorByAccNo", urlencodedParser, function (req, res) {
+  var AccNo = req.body.AccNo;
+  Error.getErrorByAccNo(AccNo, function(err, error2){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
+router.post("/getManyError", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  Error.getErrorByAccountId(accountId, function(err, error2){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
+router.post("/getManyErrorByDate", urlencodedParser, function (req, res) {
+  var accountId = req.body.accountId;
+  var date = req.body.date;
+  Error.getErrorByDate(accountId,date, function(err, error2){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
 
 
 
