@@ -988,11 +988,11 @@ router.post("/registerError", urlencodedParser, function (req, res) {
   
   var accountId = req.body.accountId;
   var error1 = req.body.error;
-  var type = req.body.type;
+  var isFixed = 0;
   var newError = {
     accountId: accountId,
     error1: error1,
-    type: type
+    isFixed: isFixed
   };
 
   Error.createError(newError, function (err, error2) {
@@ -1013,11 +1013,11 @@ router.post("/updateError", urlencodedParser, function (req, res) {
   var id = req.body.id;
   var accountId = req.body.accountId;
   var error1 = req.body.error;
-  var type = req.body.type;
+  var isFixed = req.body.isFixed;
   var newError = {
     accountId: accountId,
     error1: error1,
-    type: type
+    isFixed: isFixed
   };
 
   Error.updateError(id,newError, function (err, error2) {
