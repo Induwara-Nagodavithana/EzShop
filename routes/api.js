@@ -987,11 +987,11 @@ router.post("/registerError", urlencodedParser, function (req, res) {
   console.log("Register Error Start");
   
   var accountId = req.body.accountId;
-  var error1 = req.body.error;
+  var Errors = req.body.error;
   var isFixed = 0;
   var newError = {
     accountId: accountId,
-    error1: error1,
+    Error: Errors,
     isFixed: isFixed
   };
 
@@ -1016,7 +1016,7 @@ router.post("/updateError", urlencodedParser, function (req, res) {
   var isFixed = req.body.isFixed;
   var newError = {
     accountId: accountId,
-    error1: error1,
+    Error: error1,
     isFixed: isFixed
   };
 
