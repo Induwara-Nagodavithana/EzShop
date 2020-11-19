@@ -1048,6 +1048,21 @@ router.get("/getErrors", urlencodedParser, function (req, res) {
   });
 });
 
+router.post("/getNotFixedError", urlencodedParser, function (req, res) {
+  Error.getNotFixedError(id, function(err, error2){
+    if (err) {
+      console.log("errors" + err.message);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(error2);
+      res.setHeader("Content-Type", "application/json");
+     // res.body(employee);
+      res.end(JSON.stringify({ error2: error2}));
+    }
+  });
+});
+
 router.post("/deleteError", urlencodedParser, function (req, res) {
   console.log("Error Deleting");
   

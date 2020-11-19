@@ -41,6 +41,19 @@ module.exports.createError = function (newError, callback) {
       callback(err);
     });
   };
+
+  module.exports.getNotFixedError = function (callback) {
+    Error.findAll({
+        where: {
+            isFixed: 0
+          }}
+    ).then((error1) => {
+      callback(null, error1);
+    })
+    .catch((err) => {
+      callback(err);
+    });
+  };
    
   module.exports.deleteError = function (id, callback) {
     console.log("Delete Error Id");
