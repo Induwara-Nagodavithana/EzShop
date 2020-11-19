@@ -68,7 +68,7 @@ module.exports.createAccounts = function (newAccounts, callback) {
   module.exports.getAccountsIsConnectedById = function (id, callback) {
     Accounts.findOne({
       where: {  id: id},
-      include: [isConnected]
+      include: ['isConnected']
     }).then((accounts) => {
       callback(null, accounts);
     });
