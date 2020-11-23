@@ -1,64 +1,35 @@
-const Sequelize = require("sequelize");
+const mongoose = require("mongoose");
 
-const db = require("../config/database");
 
-var User = db.define(
-  "user",
-  {
+const user = new mongoose.Schema({
+    
+    first_name: {
+      type: String,
+    },
+    last_name: {
+      type: String,
+    },
     nic: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      unique: true,
+      type: String,
+      unique:true
     },
     password: {
-      type: Sequelize.STRING,
-      allowNull: false,
+      type: String,
     },
-    contactno: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    firstname: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    lastname: {
-      type: Sequelize.STRING,
-      // allowNull defaults to true
-    },
-    gender: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    address: {
-      type: Sequelize.STRING,
-      // allowNull defaults to true
-    },
-    city: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    province: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: Sequelize.STRING,
-      // allowNull: false,
-    },
-    image: {
-      type: Sequelize.STRING,
-      // allowNull: false,
-    },
-    
-  },
-  {
-    timestamps: true,
-    createdAt: "CreatedAt",
-    updatedAt: "UpdatedAt",
-    freezeTableName: true,
+    todos: [
+      {
+        title: {
+          type: String,
+        },
+        data: {
+          type: String,
+        },
+
+      }
+    ],
   }
+    
 );
 
 
-module.exports = User;
+module.exports = User = mongoose.model('users', user);
