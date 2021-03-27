@@ -16,7 +16,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 // const passportJWTInit = require("./auth/passport_jwt");
 
 router.get("/all", function (req, res) {
-  res.send("Hello World from API. \n /getUsers \n /getOneUser \n /registerUser \n /updateUser \n /deleteUser \n /registerEmployee \n /updateEmployee \n /getEmployees \n /getOneEmployee \n /deleteEmployee \n ");
+  res.send("Hello World from API. \n /getAllUsers \n /getOneById \n /registerUser \n /updateUser \n /deleteUser \n /registerItems \n /updateItems \n /getAllItems \n /getOneItemsById \n /deleteItems \n ");
 });
 
 
