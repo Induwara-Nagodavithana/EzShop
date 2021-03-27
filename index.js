@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 // var passport = require("passport");
 
-// const passportJWTInit = require("./auth/passport_jwt");
+
 //Database
 var connectDB = require("./config/database");
 
