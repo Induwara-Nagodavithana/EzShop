@@ -13,20 +13,33 @@ const user = new mongoose.Schema({
       type: String,
       unique:true
     },
+    gender: {
+      type: String,
+    },
     password: {
       type: String,
     },
-    todos: [
-      {
-        title: {
-          type: String,
-        },
-        data: {
-          type: String,
-        },
-
-      }
-    ],
+    type: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    province: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+    contactNo: {
+      type: String,
+    },
+    cart_id: {
+      type: String,
+    }
   }
     
 );

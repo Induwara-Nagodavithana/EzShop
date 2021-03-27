@@ -13,12 +13,14 @@
 
 const mongoose = require("mongoose");
 
-const URI = 'mongodb+srv://admin:1234@testcluster1.7genl.mongodb.net/notes?retryWrites=true&w=majority';
+const URI = 'mongodb+srv://Admin:1234@cluster0.rjm7k.mongodb.net/EZShop?retryWrites=true&w=majority';
 
 const connectDB = async () => {
   await mongoose.connect(URI, {
     useUnifiedTopology:true,
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
   });
   console.log('DB connected ....');
 }
