@@ -5,9 +5,7 @@ const cart = new mongoose.Schema({
 
     customer_id: {
         type: String,
-    },
-    seller_id: {
-        type: String,
+        unique:true
     },
     items: [
         {

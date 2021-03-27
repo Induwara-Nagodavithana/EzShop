@@ -93,25 +93,25 @@ module.exports.createOrder = function (newOrder, callback) {
       }); 
   };
 
-  module.exports.findAllOrderByDateAndSID = function (SID, sdate, edate, callback) {
-    var sDate = new Date(sdate);
-    var eDate = new Date(edate);
-    console.log("find One Order");
-    console.log("Date : "+ sDate.toISOString());
-    Order.find({
-      'seller_id': SID,
-      'order_date': {
-        $gte:sDate.toISOString(),
-        $lt: eDate.toISOString()
-      }
-    })
-    .then((order) => {
-        callback(null, order);
-      })
-      .catch((err) => {
-        callback(err);
-      }); 
-  };
+//   module.exports.findAllOrderByDateAndSID = function (SID, sdate, edate, callback) {
+//     var sDate = new Date(sdate);
+//     var eDate = new Date(edate);
+//     console.log("find One Order");
+//     console.log("Date : "+ sDate.toISOString());
+//     Order.find({
+//       'seller_id': SID,
+//       'order_date': {
+//         $gte:sDate.toISOString(),
+//         $lt: eDate.toISOString()
+//       }
+//     })
+//     .then((order) => {
+//         callback(null, order);
+//       })
+//       .catch((err) => {
+//         callback(err);
+//       }); 
+//   };
 
   module.exports.findAllOrderByDateAndCID = function (CID, sdate, edate, callback) {
     var sDate = new Date(sdate);

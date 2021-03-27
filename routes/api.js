@@ -358,19 +358,19 @@ router.post('/getAllOrdersByCustomer',urlencodedParser, async(req,res) => {
   });
 });
 
-router.post('/getAllOrdersByDateAndSID',urlencodedParser, async(req,res) => {
-  Order.findAllOrderByDateAndSID(req.body.id, req.body.sDate, req.body.eDate , function (err, order) {
-    if (err) {
-      console.log("errors" + err);
-      res.sendStatus(400);
-      return;
-    } else {
-      console.log(order);
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
-    }
-  });
-});
+// router.post('/getAllOrdersByDateAndSID',urlencodedParser, async(req,res) => {
+//   Order.findAllOrderByDateAndSID(req.body.id, req.body.sDate, req.body.eDate , function (err, order) {
+//     if (err) {
+//       console.log("errors" + err);
+//       res.sendStatus(400);
+//       return;
+//     } else {
+//       console.log(order);
+//       res.setHeader("Content-Type", "application/json");
+//       res.end(JSON.stringify({ order: order}));
+//     }
+//   });
+// });
 
 
 router.post('/getAllOrdersByDateAndCID',urlencodedParser, async(req,res) => {
@@ -390,13 +390,11 @@ router.post('/getAllOrdersByDateAndCID',urlencodedParser, async(req,res) => {
 router.post("/registerOrder", function (req, res) {
 
   var CID = req.body.customer_id;
-  var SID = req.body.seller_id;
   var order = req.body.order;
   var date = req.body.order_date;
 
   var newOrder = {
     customer_id: CID,
-    seller_id: SID,
     order: order,
     order_date: date,
   };
@@ -420,13 +418,11 @@ router.post("/updateOrder", urlencodedParser, function (req, res) {
 
  
   var CID = req.body.customer_id;
-  var SID = req.body.seller_id;
   var order = req.body.order;
   var date = req.body.order_date;
 
   var newOrder = {
     customer_id: CID,
-    seller_id: SID,
     order: order,
     order_date: date,
   };
@@ -460,6 +456,147 @@ router.post("/deleteOrder", urlencodedParser, function (req, res) {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
       res.end(JSON.stringify({ order: order}));
+    }
+  });
+});
+
+
+
+/////////////// Carts API ///////////////
+
+router.get('/getAllCarts', async(req,res) => {
+  Cart.findAllCart( function (err, cart) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(cart);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ cart: cart}));
+    }
+  });
+});
+
+router.post('/getOneCartById',urlencodedParser, async(req,res) => {
+  Cart.findOneCart(req.body.id, function (err, cart) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(cart);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ cart: cart}));
+    }
+  });
+});
+
+router.post('/getCartByCustomer',urlencodedParser, async(req,res) => {
+  Cart.findCartByCustomer(req.body.id, function (err, cart) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(cart);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ cart: cart}));
+    }
+  });
+});
+
+router.post("/registerCart",urlencodedParser, function (req, res) {
+
+  var CID = req.body.customer_id;
+  var items = req.body.items;
+
+  var newCart = {
+    customer_id: CID,
+    items: items,
+  };
+
+  Cart.createCart(newCart, function (err, cart) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(cart);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ cart: cart}));
+    }
+  });
+
+});
+
+
+router.post("/updateCart", urlencodedParser, function (req, res) {
+
+ 
+  var CID = req.body.customer_id;
+  var items = req.body.items;
+
+  var newCart = {
+    customer_id: CID,
+    items: items,
+  };
+
+  let newCart2 = Object.fromEntries(Object.entries(newCart).filter(([_, v]) => v != null));
+
+  Cart.updateCart(req.body.id,newCart2, function (err, cart) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(cart);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ cart: cart}));
+    }
+  });
+});
+
+router.post("/updateCartByCID", urlencodedParser, function (req, res) {
+
+ 
+  var CID = req.body.customer_id;
+  var items = req.body.items;
+
+  var newCart = {
+    customer_id: CID,
+    items: items,
+  };
+
+  let newCart2 = Object.fromEntries(Object.entries(newCart).filter(([_, v]) => v != null));
+
+  Cart.updateCartByCID(CID,newCart2, function (err, cart) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(cart);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ cart: cart}));
+    }
+  });
+});
+
+
+router.post("/deleteCart", urlencodedParser, function (req, res) {
+  console.log("Cart Deleting");
+ var id = req.body.id;
+  
+ Cart.deleteCart(id, function (err, cart) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(cart);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ cart: cart}));
     }
   });
 });
