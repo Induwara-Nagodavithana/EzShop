@@ -66,3 +66,31 @@ module.exports.createItem = function (newItem, callback) {
         callback(err);
       }); 
   };
+
+  module.exports.findAllItemBySeller = function (id, callback) {
+    console.log("find One item");
+    
+    Item.find({
+      'seller_id': id
+    })
+    .then((item) => {
+        callback(null, item);
+      })
+      .catch((err) => {
+        callback(err);
+      }); 
+  };
+
+  module.exports.findAllItemByCategory = function (category, callback) {
+    console.log("find One item");
+    console.log("category: " + category);
+    Item.find({
+      'category': category
+    })
+    .then((item) => {
+        callback(null, item);
+      })
+      .catch((err) => {
+        callback(err);
+      }); 
+  };

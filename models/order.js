@@ -9,7 +9,7 @@ const order = new mongoose.Schema({
     seller_id: {
       type: String,
     },
-    orders: [
+    order: [
         {
           item_id: {
             type: String,
