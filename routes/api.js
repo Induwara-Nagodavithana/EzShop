@@ -226,6 +226,7 @@ router.post("/registerItem", urlencodedParser, function (req, res) {
   var name = req.body.name;
   var price = req.body.price;
   var description = req.body.description;
+  var qty = req.body.qty;
   var category = req.body.category;
   var sellerId = req.body.sellerId;
 
@@ -233,6 +234,7 @@ router.post("/registerItem", urlencodedParser, function (req, res) {
     name: name,
     price: price,
     description: description,
+    qty: qty,
     category: category,
     seller_id: sellerId,
   };
@@ -258,6 +260,7 @@ router.post("/updateItem", urlencodedParser, function (req, res) {
   var name = req.body.name;
   var price = req.body.price;
   var description = req.body.description;
+  var qty = req.body.qty;
   var category = req.body.category;
   var sellerId = req.body.sellerId;
 
@@ -265,6 +268,7 @@ router.post("/updateItem", urlencodedParser, function (req, res) {
     name: name,
     price: price,
     description: description,
+    qty: qty,
     category: category,
     seller_id: sellerId,
   };

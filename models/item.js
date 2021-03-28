@@ -13,6 +13,9 @@ const item = new mongoose.Schema({
     description: {
         type: String,
     },
+    qty: {
+        type: Number,
+    },
     category: {
         type: String,
     },
