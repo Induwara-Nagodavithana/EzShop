@@ -10,6 +10,9 @@ const item = new mongoose.Schema({
     price: {
         type: Decimal128,
     },
+    description: {
+        type: String,
+    },
     category: {
         type: String,
     },

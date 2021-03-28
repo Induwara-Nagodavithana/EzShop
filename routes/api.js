@@ -225,12 +225,14 @@ router.post("/registerItem", urlencodedParser, function (req, res) {
 
   var name = req.body.name;
   var price = req.body.price;
+  var description = req.body.description;
   var category = req.body.category;
   var sellerId = req.body.sellerId;
 
   var newItem = {
     name: name,
     price: price,
+    description: description,
     category: category,
     seller_id: sellerId,
   };
@@ -255,12 +257,14 @@ router.post("/updateItem", urlencodedParser, function (req, res) {
  
   var name = req.body.name;
   var price = req.body.price;
+  var description = req.body.description;
   var category = req.body.category;
   var sellerId = req.body.sellerId;
 
   var newItem = {
     name: name,
     price: price,
+    description: description,
     category: category,
     seller_id: sellerId,
   };

@@ -1,4 +1,6 @@
 const express = require("express");
+const multer = require("multer");
+const ejs = require("ejs");
 const app = express();
 const port = process.env.PORT || 5000;
 // var passport = require("passport");
