@@ -1,4 +1,6 @@
 var express = require("express");
+const multer = require("multer");
+
 var router = express.Router();
 var bodyParser = require('body-parser')
 var User = require("../controller/user");
@@ -12,6 +14,42 @@ var connectDB = require("../config/database");
 const bcrypt = require("bcryptjs");
 const saltRounds = 5;
 
+// var imageName;
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function (req, file, cb) {
+    // imageName = req.body.sellerId + '-' + Date.now()+file.originalname;
+    cb(null, req.body.sellerId + '-' + Date.now() + file.originalname);
+    // cb(null, req.body.sellerId +new Date().toISOString() + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(new Error ('Image unacceptable!'), false);
+  }
+}
+
+const upload = multer({
+  storage: storage, 
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
+
+// const upload = multer({
+//   storage: storage,
+//   limits: { fileSize: 10000000 }
+// }).single('image');
+
+
+
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 // const passportJWTInit = require("./auth/passport_jwt");
 
@@ -22,8 +60,8 @@ router.get("/all", function (req, res) {
 
 /////////////// Users API ///////////////
 
-router.get('/getAllUsers', async(req,res) => {
-  User.findAllUser( function (err, user) {
+router.get('/getAllUsers', async (req, res) => {
+  User.findAllUser(function (err, user) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -31,12 +69,12 @@ router.get('/getAllUsers', async(req,res) => {
     } else {
       console.log(user);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ user: user}));
+      res.end(JSON.stringify({ user: user }));
     }
   });
 });
 
-router.post('/getOneUserById', urlencodedParser, async(req,res) => {
+router.post('/getOneUserById', urlencodedParser, async (req, res) => {
   User.findOneUser(req.body.id, function (err, user) {
     console.log(req.body.id)
     if (err) {
@@ -46,7 +84,7 @@ router.post('/getOneUserById', urlencodedParser, async(req,res) => {
     } else {
       console.log(user);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ user: user}));
+      res.end(JSON.stringify({ user: user }));
     }
   });
 });
@@ -67,11 +105,11 @@ router.post("/registerUser", urlencodedParser, function (req, res) {
   var gender = req.body.gender;
 
   var newUser = {
-    
+
     first_name: fname,
     last_name: lname,
     nic: nic,
-    gender:gender,
+    gender: gender,
     password: password,
     type: type,
     address: address,
@@ -90,12 +128,12 @@ router.post("/registerUser", urlencodedParser, function (req, res) {
     } else {
       console.log(user);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ user: user}));
+      res.end(JSON.stringify({ user: user }));
     }
   });
 
 
- 
+
 });
 
 router.post("/updateUser", urlencodedParser, function (req, res) {
@@ -114,11 +152,11 @@ router.post("/updateUser", urlencodedParser, function (req, res) {
   var gender = req.body.gender;
 
   var newUser = {
-    
+
     first_name: fname,
     last_name: lname,
     nic: nic,
-    gender:gender,
+    gender: gender,
     password: password,
     type: type,
     address: address,
@@ -131,7 +169,7 @@ router.post("/updateUser", urlencodedParser, function (req, res) {
 
   let newUser2 = Object.fromEntries(Object.entries(newUser).filter(([_, v]) => v != null));
 
-  User.updateUser(req.body.id,newUser2, function (err, user) {
+  User.updateUser(req.body.id, newUser2, function (err, user) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -139,7 +177,7 @@ router.post("/updateUser", urlencodedParser, function (req, res) {
     } else {
       console.log(user);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ user: user}));
+      res.end(JSON.stringify({ user: user }));
     }
   });
 
@@ -147,8 +185,8 @@ router.post("/updateUser", urlencodedParser, function (req, res) {
 
 router.post("/deleteUser", urlencodedParser, function (req, res) {
   console.log("User Deleting");
- var id = req.body.id;
-  
+  var id = req.body.id;
+
   User.deleteUser(id, function (err, user) {
     if (err) {
       console.log("errors" + err);
@@ -157,15 +195,15 @@ router.post("/deleteUser", urlencodedParser, function (req, res) {
     } else {
       console.log(user);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ user: user}));
+      res.end(JSON.stringify({ user: user }));
     }
   });
 });
 
 /////////////// Items API ///////////////
 
-router.get('/getAllItems', async(req,res) => {
-  Item.findAllItem( function (err, item) {
+router.get('/getAllItems', async (req, res) => {
+  Item.findAllItem(function (err, item) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -173,12 +211,12 @@ router.get('/getAllItems', async(req,res) => {
     } else {
       console.log(item);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ item: item}));
+      res.end(JSON.stringify({ item: item }));
     }
   });
 });
 
-router.post('/getOneItemById',urlencodedParser, async(req,res) => {
+router.post('/getOneItemById', urlencodedParser, async (req, res) => {
   Item.findOneItem(req.body.id, function (err, item) {
     if (err) {
       console.log("errors" + err);
@@ -187,13 +225,13 @@ router.post('/getOneItemById',urlencodedParser, async(req,res) => {
     } else {
       console.log(item);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ item: item}));
+      res.end(JSON.stringify({ item: item }));
     }
   });
 });
 
 
-router.post('/getAllItemsBySeller',urlencodedParser, async(req,res) => {
+router.post('/getAllItemsBySeller', urlencodedParser, async (req, res) => {
   Item.findAllItemBySeller(req.body.id, function (err, item) {
     if (err) {
       console.log("errors" + err);
@@ -202,12 +240,12 @@ router.post('/getAllItemsBySeller',urlencodedParser, async(req,res) => {
     } else {
       console.log(item);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ item: item}));
+      res.end(JSON.stringify({ item: item }));
     }
   });
 });
 
-router.post('/getAllItemsByCategory',urlencodedParser, async(req,res) => {
+router.post('/getAllItemsByCategory', urlencodedParser, async (req, res) => {
   Item.findAllItemByCategory(req.body.category, function (err, item) {
     if (err) {
       console.log("errors" + err);
@@ -216,13 +254,14 @@ router.post('/getAllItemsByCategory',urlencodedParser, async(req,res) => {
     } else {
       console.log(item);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ item: item}));
+      res.end(JSON.stringify({ item: item }));
     }
   });
 });
 
-router.post("/registerItem", urlencodedParser, function (req, res) {
+router.post("/registerItem", urlencodedParser, upload.single('image'), function (req, res) {
 
+  console.log(req.file);
   var name = req.body.name;
   var price = req.body.price;
   var description = req.body.description;
@@ -237,6 +276,7 @@ router.post("/registerItem", urlencodedParser, function (req, res) {
     qty: qty,
     category: category,
     seller_id: sellerId,
+    image: req.file.path
   };
 
   Item.createItem(newItem, function (err, item) {
@@ -245,18 +285,30 @@ router.post("/registerItem", urlencodedParser, function (req, res) {
       res.sendStatus(400);
       return;
     } else {
+      // upload(req, res, (err) => {
+      //   if (err) {
+      //     res.sendStatus(400);
+      //     return;
+      //   } else {
       console.log(item);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ item: item}));
+      res.end(JSON.stringify({ item: item }));
+      //   }
+      // });
     }
   });
 
 });
 
 
-router.post("/updateItem", urlencodedParser, function (req, res) {
+router.post("/updateItem", urlencodedParser,upload.single('image'), function (req, res) {
 
- 
+  var imageName2 = null;
+  if (req.file!=null) {
+    // upload.single('image');
+    imageName2=req.file.path;
+  }
+
   var name = req.body.name;
   var price = req.body.price;
   var description = req.body.description;
@@ -271,11 +323,13 @@ router.post("/updateItem", urlencodedParser, function (req, res) {
     qty: qty,
     category: category,
     seller_id: sellerId,
+    image: imageName2
   };
+  console.log(imageName2);
 
   let newItem2 = Object.fromEntries(Object.entries(newItem).filter(([_, v]) => v != null));
 
-  Item.updateItem(req.body.id,newItem2, function (err, item) {
+  Item.updateItem(req.body.id, newItem2, function (err, item) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -283,7 +337,7 @@ router.post("/updateItem", urlencodedParser, function (req, res) {
     } else {
       console.log(item);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ item: item}));
+      res.end(JSON.stringify({ item: item }));
     }
   });
 
@@ -291,9 +345,9 @@ router.post("/updateItem", urlencodedParser, function (req, res) {
 
 router.post("/deleteItem", urlencodedParser, function (req, res) {
   console.log("Item Deleting");
- var id = req.body.id;
-  
- Item.deleteItem(id, function (err, item) {
+  var id = req.body.id;
+
+  Item.deleteItem(id, function (err, item) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -301,7 +355,7 @@ router.post("/deleteItem", urlencodedParser, function (req, res) {
     } else {
       console.log(item);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ item: item}));
+      res.end(JSON.stringify({ item: item }));
     }
   });
 });
@@ -309,8 +363,8 @@ router.post("/deleteItem", urlencodedParser, function (req, res) {
 
 /////////////// Orders API ///////////////
 
-router.get('/getAllOrders', async(req,res) => {
-  Order.findAllOrder( function (err, order) {
+router.get('/getAllOrders', async (req, res) => {
+  Order.findAllOrder(function (err, order) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -318,12 +372,12 @@ router.get('/getAllOrders', async(req,res) => {
     } else {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
+      res.end(JSON.stringify({ order: order }));
     }
   });
 });
 
-router.post('/getOneOrderById',urlencodedParser, async(req,res) => {
+router.post('/getOneOrderById', urlencodedParser, async (req, res) => {
   Order.findOneOrder(req.body.id, function (err, order) {
     if (err) {
       console.log("errors" + err);
@@ -332,13 +386,13 @@ router.post('/getOneOrderById',urlencodedParser, async(req,res) => {
     } else {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
+      res.end(JSON.stringify({ order: order }));
     }
   });
 });
 
 
-router.post('/getAllOrdersBySeller',urlencodedParser, async(req,res) => {
+router.post('/getAllOrdersBySeller', urlencodedParser, async (req, res) => {
   Order.findAllOrderBySeller(req.body.id, function (err, order) {
     if (err) {
       console.log("errors" + err);
@@ -347,12 +401,12 @@ router.post('/getAllOrdersBySeller',urlencodedParser, async(req,res) => {
     } else {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
+      res.end(JSON.stringify({ order: order }));
     }
   });
 });
 
-router.post('/getAllOrdersByCustomer',urlencodedParser, async(req,res) => {
+router.post('/getAllOrdersByCustomer', urlencodedParser, async (req, res) => {
   Order.findAllOrderByCustomer(req.body.id, function (err, order) {
     if (err) {
       console.log("errors" + err);
@@ -361,7 +415,7 @@ router.post('/getAllOrdersByCustomer',urlencodedParser, async(req,res) => {
     } else {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
+      res.end(JSON.stringify({ order: order }));
     }
   });
 });
@@ -381,8 +435,8 @@ router.post('/getAllOrdersByCustomer',urlencodedParser, async(req,res) => {
 // });
 
 
-router.post('/getAllOrdersByDateAndCID',urlencodedParser, async(req,res) => {
-  Order.findAllOrderByDateAndCID(req.body.id, req.body.sDate, req.body.eDate , function (err, order) {
+router.post('/getAllOrdersByDateAndCID', urlencodedParser, async (req, res) => {
+  Order.findAllOrderByDateAndCID(req.body.id, req.body.sDate, req.body.eDate, function (err, order) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -390,7 +444,7 @@ router.post('/getAllOrdersByDateAndCID',urlencodedParser, async(req,res) => {
     } else {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
+      res.end(JSON.stringify({ order: order }));
     }
   });
 });
@@ -415,7 +469,7 @@ router.post("/registerOrder", function (req, res) {
     } else {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
+      res.end(JSON.stringify({ order: order }));
     }
   });
 
@@ -424,7 +478,7 @@ router.post("/registerOrder", function (req, res) {
 
 router.post("/updateOrder", urlencodedParser, function (req, res) {
 
- 
+
   var CID = req.body.customer_id;
   var order = req.body.order;
   var date = req.body.order_date;
@@ -437,7 +491,7 @@ router.post("/updateOrder", urlencodedParser, function (req, res) {
 
   let newOrder2 = Object.fromEntries(Object.entries(newOrder).filter(([_, v]) => v != null));
 
-  Order.updateOrder(req.body.id,newOrder2, function (err, order) {
+  Order.updateOrder(req.body.id, newOrder2, function (err, order) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -445,7 +499,7 @@ router.post("/updateOrder", urlencodedParser, function (req, res) {
     } else {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
+      res.end(JSON.stringify({ order: order }));
     }
   });
 });
@@ -453,9 +507,9 @@ router.post("/updateOrder", urlencodedParser, function (req, res) {
 
 router.post("/deleteOrder", urlencodedParser, function (req, res) {
   console.log("Order Deleting");
- var id = req.body.id;
-  
- Order.deleteOrder(id, function (err, order) {
+  var id = req.body.id;
+
+  Order.deleteOrder(id, function (err, order) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -463,7 +517,7 @@ router.post("/deleteOrder", urlencodedParser, function (req, res) {
     } else {
       console.log(order);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ order: order}));
+      res.end(JSON.stringify({ order: order }));
     }
   });
 });
@@ -472,8 +526,8 @@ router.post("/deleteOrder", urlencodedParser, function (req, res) {
 
 /////////////// Carts API ///////////////
 
-router.get('/getAllCarts', async(req,res) => {
-  Cart.findAllCart( function (err, cart) {
+router.get('/getAllCarts', async (req, res) => {
+  Cart.findAllCart(function (err, cart) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -481,12 +535,12 @@ router.get('/getAllCarts', async(req,res) => {
     } else {
       console.log(cart);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ cart: cart}));
+      res.end(JSON.stringify({ cart: cart }));
     }
   });
 });
 
-router.post('/getOneCartById',urlencodedParser, async(req,res) => {
+router.post('/getOneCartById', urlencodedParser, async (req, res) => {
   Cart.findOneCart(req.body.id, function (err, cart) {
     if (err) {
       console.log("errors" + err);
@@ -495,12 +549,12 @@ router.post('/getOneCartById',urlencodedParser, async(req,res) => {
     } else {
       console.log(cart);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ cart: cart}));
+      res.end(JSON.stringify({ cart: cart }));
     }
   });
 });
 
-router.post('/getCartByCustomer',urlencodedParser, async(req,res) => {
+router.post('/getCartByCustomer', urlencodedParser, async (req, res) => {
   Cart.findCartByCustomer(req.body.id, function (err, cart) {
     if (err) {
       console.log("errors" + err);
@@ -509,12 +563,12 @@ router.post('/getCartByCustomer',urlencodedParser, async(req,res) => {
     } else {
       console.log(cart);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ cart: cart}));
+      res.end(JSON.stringify({ cart: cart }));
     }
   });
 });
 
-router.post("/registerCart",urlencodedParser, function (req, res) {
+router.post("/registerCart", urlencodedParser, function (req, res) {
 
   var CID = req.body.customer_id;
   var items = req.body.items;
@@ -532,7 +586,7 @@ router.post("/registerCart",urlencodedParser, function (req, res) {
     } else {
       console.log(cart);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ cart: cart}));
+      res.end(JSON.stringify({ cart: cart }));
     }
   });
 
@@ -541,7 +595,7 @@ router.post("/registerCart",urlencodedParser, function (req, res) {
 
 router.post("/updateCart", urlencodedParser, function (req, res) {
 
- 
+
   var CID = req.body.customer_id;
   var items = req.body.items;
 
@@ -552,7 +606,7 @@ router.post("/updateCart", urlencodedParser, function (req, res) {
 
   let newCart2 = Object.fromEntries(Object.entries(newCart).filter(([_, v]) => v != null));
 
-  Cart.updateCart(req.body.id,newCart2, function (err, cart) {
+  Cart.updateCart(req.body.id, newCart2, function (err, cart) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -560,14 +614,14 @@ router.post("/updateCart", urlencodedParser, function (req, res) {
     } else {
       console.log(cart);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ cart: cart}));
+      res.end(JSON.stringify({ cart: cart }));
     }
   });
 });
 
 router.post("/updateCartByCID", urlencodedParser, function (req, res) {
 
- 
+
   var CID = req.body.customer_id;
   var items = req.body.items;
 
@@ -578,7 +632,7 @@ router.post("/updateCartByCID", urlencodedParser, function (req, res) {
 
   let newCart2 = Object.fromEntries(Object.entries(newCart).filter(([_, v]) => v != null));
 
-  Cart.updateCartByCID(CID,newCart2, function (err, cart) {
+  Cart.updateCartByCID(CID, newCart2, function (err, cart) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -586,7 +640,7 @@ router.post("/updateCartByCID", urlencodedParser, function (req, res) {
     } else {
       console.log(cart);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ cart: cart}));
+      res.end(JSON.stringify({ cart: cart }));
     }
   });
 });
@@ -594,9 +648,9 @@ router.post("/updateCartByCID", urlencodedParser, function (req, res) {
 
 router.post("/deleteCart", urlencodedParser, function (req, res) {
   console.log("Cart Deleting");
- var id = req.body.id;
-  
- Cart.deleteCart(id, function (err, cart) {
+  var id = req.body.id;
+
+  Cart.deleteCart(id, function (err, cart) {
     if (err) {
       console.log("errors" + err);
       res.sendStatus(400);
@@ -604,7 +658,7 @@ router.post("/deleteCart", urlencodedParser, function (req, res) {
     } else {
       console.log(cart);
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ cart: cart}));
+      res.end(JSON.stringify({ cart: cart }));
     }
   });
 });

@@ -22,6 +22,9 @@ const item = new mongoose.Schema({
     seller_id: {
         type: String,
     },
+    image: {
+        type: String,
+    }
 
 }
 

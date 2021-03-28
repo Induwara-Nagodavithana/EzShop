@@ -1,15 +1,18 @@
 const express = require("express");
-const multer = require("multer");
+// const multer = require("multer");
 const ejs = require("ejs");
 
 // const storage = multer.diskStorage({
 //   destination: './public/uploads/',
-
-// })
+//   filename: function(req,file,cb){
+//     cb(null, file.fieldname + '-' + Date.now() + 
+//     path.extname(file.originalname));
+//   }
+// });
 
 const app = express();
-app.set('view engine', 'ejs');
-app.use(express.static('./public'));
+// app.set('view engine', 'ejs');
+app.use('/uploads',express.static('uploads'));
 const port = process.env.PORT || 5000;
 // var passport = require("passport");
 
