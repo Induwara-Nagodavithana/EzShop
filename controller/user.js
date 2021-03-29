@@ -71,3 +71,31 @@ module.exports.findOneUser = function (id, callback) {
       callback(err);
     });
 };
+
+module.exports.verifyUser = function (email,password, callback) {
+  console.log("find One email");
+  
+  User.findOne({
+    'email': email
+  })
+  .then((user) => {
+      // callback(null, user);
+          // password = hash;
+          console.log("userDetailes");
+          console.log(user);
+          console.log("user.password "+user.password);
+          console.log("password "+password);
+          bcrypt.compare(password, user.password, function(err, result) {
+            // result == true
+            console.log(result);
+            if(result){
+              callback(null, user);
+            }else{
+              callback(new Error("Credentials Does Not Matched"));
+            }
+        });
+    })
+    .catch((err) => {
+      callback(err);
+    }); 
+};

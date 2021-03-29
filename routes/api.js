@@ -9,7 +9,6 @@ var Order = require("../controller/order");
 var Cart = require("../controller/cart");
 var connectDB = require("../config/database");
 
-// var Center = require("../models/centers");
 //var passport = require("passport");
 const bcrypt = require("bcryptjs");
 const saltRounds = 5;
@@ -21,9 +20,7 @@ const storage = multer.diskStorage({
     cb(null, './uploads/');
   },
   filename: function (req, file, cb) {
-    // imageName = req.body.sellerId + '-' + Date.now()+file.originalname;
     cb(null, req.body.sellerId + '-' + Date.now() + file.originalname);
-    // cb(null, req.body.sellerId +new Date().toISOString() + file.originalname);
   }
 });
 
@@ -42,12 +39,6 @@ const upload = multer({
   },
   fileFilter: fileFilter
 });
-
-// const upload = multer({
-//   storage: storage,
-//   limits: { fileSize: 10000000 }
-// }).single('image');
-
 
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -123,7 +114,8 @@ router.post("/registerUser", urlencodedParser, function (req, res) {
   User.createUser(newUser, function (err, user) {
     if (err) {
       console.log("errors" + err);
-      res.sendStatus(400);
+      res.setHeader("Content-Type", "application/json");
+      res.end("" + err);
       return;
     } else {
       console.log(user);
@@ -419,20 +411,6 @@ router.post('/getAllOrdersByCustomer', urlencodedParser, async (req, res) => {
     }
   });
 });
-
-// router.post('/getAllOrdersByDateAndSID',urlencodedParser, async(req,res) => {
-//   Order.findAllOrderByDateAndSID(req.body.id, req.body.sDate, req.body.eDate , function (err, order) {
-//     if (err) {
-//       console.log("errors" + err);
-//       res.sendStatus(400);
-//       return;
-//     } else {
-//       console.log(order);
-//       res.setHeader("Content-Type", "application/json");
-//       res.end(JSON.stringify({ order: order}));
-//     }
-//   });
-// });
 
 
 router.post('/getAllOrdersByDateAndCID', urlencodedParser, async (req, res) => {

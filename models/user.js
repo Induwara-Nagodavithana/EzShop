@@ -33,6 +33,7 @@ const user = new mongoose.Schema({
     },
     email: {
       type: String,
+      unique:true
     },
     contactNo: {
       type: String,
