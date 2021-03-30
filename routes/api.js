@@ -281,6 +281,12 @@ router.post("/registerItem", urlencodedParser, upload.single('image'), function 
   var category = req.body.category;
   var sellerId = req.body.sellerId;
 
+  var imageName2 = null;
+  if (req.file != null) {
+    // upload.single('image');
+    imageName2 = req.file.path;
+  }
+
   var newItem = {
     name: name,
     price: price,
@@ -288,7 +294,7 @@ router.post("/registerItem", urlencodedParser, upload.single('image'), function 
     qty: qty,
     category: category,
     seller_id: sellerId,
-    image: req.file.path
+    image: imageName2
   };
 
   Item.createItem(newItem, function (err, item) {
