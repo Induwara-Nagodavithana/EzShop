@@ -241,6 +241,19 @@ router.post('/getOneItemById', urlencodedParser, async (req, res) => {
     }
   });
 });
+router.post('/getItemByName', urlencodedParser, async (req, res) => {
+  Item.findItemByName(req.body.name, function (err, item) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(item);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ item: item }));
+    }
+  });
+});
 
 
 router.post('/getAllItemsBySeller', urlencodedParser, async (req, res) => {

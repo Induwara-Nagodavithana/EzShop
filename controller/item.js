@@ -67,6 +67,20 @@ module.exports.createItem = function (newItem, callback) {
       }); 
   };
 
+  module.exports.findItemByName = function (name, callback) {
+    console.log("find item by Name");
+    
+    Item.find({
+      'name': { $regex: '.*^'+ name +'.*', $options: 'i' }
+    })
+    .then((item) => {
+        callback(null, item);
+      })
+      .catch((err) => {
+        callback(err);
+      }); 
+  };
+
   module.exports.findAllItemBySeller = function (id, callback) {
     console.log("find One item");
     
