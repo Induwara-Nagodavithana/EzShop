@@ -81,6 +81,21 @@ router.post('/getOneUserById', urlencodedParser, async (req, res) => {
   });
 });
 
+router.post('/getOneUserByEmail', urlencodedParser, async (req, res) => {
+  User.findOneUserByEmail(req.body.email, function (err, user) {
+    console.log(req.body.id)
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(user);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ user: user }));
+    }
+  });
+});
+
 router.post("/registerUser", urlencodedParser, function (req, res) {
 
   var password = req.body.password;
