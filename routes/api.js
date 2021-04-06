@@ -629,6 +629,20 @@ router.post('/getOneCartById', urlencodedParser, async (req, res) => {
   });
 });
 
+router.post('/deleteOneCartItem', urlencodedParser, async (req, res) => {
+  Cart.findOneCartAndDeleteOneItem(req.body.id,req.body.itemObjectId, function (err, cart) {
+    if (err) {
+      console.log("errors" + err);
+      res.sendStatus(400);
+      return;
+    } else {
+      console.log(cart);
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ cart: cart }));
+    }
+  });
+});
+
 router.post('/getCartByCustomer', urlencodedParser, async (req, res) => {
   Cart.findCartByCustomer(req.body.id, function (err, cart) {
     if (err) {

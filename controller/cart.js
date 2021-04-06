@@ -78,6 +78,49 @@ module.exports.createCart = function (newCart, callback) {
       }); 
   };
 
+  module.exports.findOneCartAndDeleteOneItem = function (id,itemObjectId, callback) {
+    console.log("find One cart and Delete One Item");
+    
+    
+    Cart.findById(id)
+    .then((cart) => {
+      
+      var newCart= {
+        _id: cart._id,
+        customer_id : cart.customer_id,
+        items:[]
+      };
+
+      cart.items.forEach(element => {
+        if (element._id != itemObjectId) {
+          console.log("Adding Item to New Cart = "+ element._id);
+          // delete element;
+          newCart.items.push(element);
+        }
+      });
+      console.log("New Cart = "+ newCart);
+      Cart.findOneAndUpdate({_id :id}, newCart)
+    .then((cart) => {
+      Cart.findById(cart._id)
+      .then((cart) => {
+          callback(null, cart);
+        })
+        .catch((err) => {
+          callback(err);
+        }); 
+      })
+      .catch((err) => {
+        callback(err);
+      }); 
+
+      
+        // callback(null, cart);
+      })
+      .catch((err) => {
+        callback(err);
+      }); 
+  };
+
  
 
   module.exports.findCartByCustomer = function (customer, callback) {
